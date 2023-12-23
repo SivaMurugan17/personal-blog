@@ -1,4 +1,5 @@
 export type signupPayload = {
+    name : string,
     email : string,
     password : string
 }
