@@ -2,8 +2,17 @@ import { useForm } from 'react-hook-form';
 import { signupPayload } from '../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+import { API_URL_USER } from '../constants/env-variables';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { store } from '../state/store';
 
 const Signup = () => {
+
+  const [error,setError] = useState("");
+
+  const navigate = useNavigate();
 
   const signupPayloadSchema = object({
     name : string().max(20).required(),
@@ -15,8 +24,18 @@ const Signup = () => {
     resolver : yupResolver(signupPayloadSchema)
   });
 
-  const onSubmit = (data : signupPayload)=>{
-    console.log(data);
+  const onSubmit = async(data : signupPayload)=>{
+    const response = await axios.post(API_URL_USER,data);
+    if(response.data){
+      //successful signup
+      navigate("/");
+      console.log(store.getState());
+      store.dispatch({type : 'SET',payload : data});
+    }
+    else{
+      //unsuccessful signup
+      setError("Sign up failed")
+    }
   }
 
   return (
@@ -35,8 +54,9 @@ const Signup = () => {
         <input type='password' {...register('password')} className='border-b-2 outline-none'/>
         <p className='text-red-600'>{errors.password?.message}</p>
 
-        <button className='bg-slate-300 py-1 rounded-lg'>Sign up</button>
+        <button className='bg-black text-white py-1 rounded-lg'>Sign up</button>
 
+        <p>{error}</p>
       </form>
     </div>
   )

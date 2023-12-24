@@ -2,8 +2,17 @@ import { useForm } from 'react-hook-form'
 import { loginPayload } from '../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+import { API_URL_USER } from '../constants/env-variables';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { store } from '../state/store';
 
 const Login = () => {
+
+  const navigate = useNavigate();
+
+  const [error,setError] = useState("");
 
   const loginPayloadSchema = object({
     email : string().email().required(),
@@ -14,8 +23,20 @@ const Login = () => {
     resolver : yupResolver(loginPayloadSchema)
   });
 
-  const onSubmit = (data : loginPayload)=>{
-    console.log(data)
+  const onSubmit = async (data : loginPayload)=>{
+    const response = await axios.get(`${API_URL_USER}/${data.email}`);
+    if(response.data == null){
+      setError("Sign up first")
+    }
+    else if(response.data.password !== data.password){
+      setError("Wrong password")
+    }
+    else{
+      navigate("/")
+      console.log(store.getState());
+      store.dispatch({type : 'SET', payload : response.data});
+      console.log(response.data);
+    }
   }
 
   return (
@@ -30,8 +51,9 @@ const Login = () => {
         <input type='password' {...register('password')} className='border-b-2 outline-none'/>
         <p className='text-red-600'>{errors.password?.message}</p>
 
-        <button className='bg-slate-300 py-1 rounded-lg'>Login</button>
+        <button className='bg-black text-white py-1 rounded-lg'>Login</button>
 
+        <p>{error}</p>
       </form>
     </div>
   )

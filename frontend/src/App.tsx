@@ -11,8 +11,8 @@ import NewBlog from './pages/NewBlog';
 function App() {
   return (
     <div className="App">
-      <Header/>
       <BrowserRouter>
+        <Header/>
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/login' element={<Login/>}/>
@@ -20,8 +20,8 @@ function App() {
           <Route path='/blog' element={<Blog/>}/>
           <Route path='/new-blog' element={<NewBlog/>}/>
         </Routes>
+        <Footer/>
       </BrowserRouter>
-      <Footer/>
     </div>
   );
 }

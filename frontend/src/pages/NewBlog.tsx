@@ -8,7 +8,8 @@ const NewBlog = () => {
 
   const blogSchema = object({
     title : string().required(),
-    content : string().required()
+    content : string().required(),
+    authorEmail : string().email().required()
   })
 
   const {register,handleSubmit,formState : {errors}} = useForm<blog>({

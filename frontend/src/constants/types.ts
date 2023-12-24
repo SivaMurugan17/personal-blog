@@ -11,5 +11,6 @@ export type loginPayload = {
 
 export type blog = {
     title : string,
-    content : string
+    content : string,
+    authorEmail : string
 }
