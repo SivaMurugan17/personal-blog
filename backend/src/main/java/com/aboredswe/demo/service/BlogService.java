@@ -33,7 +33,9 @@ public class BlogService {
         while(iterator.hasNext()){
             list.add((Blog) iterator.next());
         }
-        return new ResponseEntity<>((Blog[]) list.toArray(),HttpStatus.OK);
+        Blog[] array = new Blog[list.size()];
+        for(int i=0;i<array.length;i++) array[i] = list.get(i);
+        return new ResponseEntity<>(array,HttpStatus.OK);
     }
 
     public ResponseEntity<Blog> findById(long id){

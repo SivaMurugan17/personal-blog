@@ -34,7 +34,9 @@ public class UserService {
         while(iterator.hasNext()){
             list.add((User) iterator.next());
         }
-        return new ResponseEntity<>((User[]) list.toArray(),HttpStatus.OK);
+        User[] array = new User[list.size()];
+        for(int i=0;i<array.length;i++) array[i] = list.get(i);
+        return new ResponseEntity<>(array,HttpStatus.OK);
     }
 
     public ResponseEntity<User> findByEmail(String email){
