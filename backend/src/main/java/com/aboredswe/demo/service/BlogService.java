@@ -48,4 +48,17 @@ public class BlogService {
         }
     }
 
+    public ResponseEntity<Blog[]> findBlogsByEmail(String email){
+        Iterator<Blog> iterator = blogRepository.findAll().iterator();
+        ArrayList<Blog> list = new ArrayList<>();
+        while(iterator.hasNext()){
+            Blog currentBlog = iterator.next();
+            if(currentBlog.getAuthorEmail().equals(email)){
+                list.add(currentBlog);
+            }
+        }
+        Blog[] result = new Blog[list.size()];
+        for(int i=0;i<result.length;i++) result[i] = list.get(i);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
 }

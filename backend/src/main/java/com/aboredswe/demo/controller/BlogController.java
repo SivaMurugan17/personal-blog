@@ -28,4 +28,9 @@ public class BlogController {
     public ResponseEntity<Blog> findBlogById(@PathVariable long id){
         return blogService.findById(id);
     }
+
+    @GetMapping("/author/{email}")
+    public ResponseEntity<Blog[]> findBlogsByEmail(@PathVariable String email){
+        return blogService.findBlogsByEmail(email);
+    }
 }

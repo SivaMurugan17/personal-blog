@@ -1,15 +1,22 @@
-export type signupPayload = {
+export type SignupPayload = {
     name : string,
     email : string,
     password : string
 }
 
-export type loginPayload = {
+export type LoginPayload = {
     email : string,
     password : string
 }
 
-export type blog = {
+export type Blog = {
+    title : string,
+    content : string,
+    authorEmail : string,
+    id : number
+}
+
+export type BlogPayload = {
     title : string,
     content : string,
     authorEmail : string

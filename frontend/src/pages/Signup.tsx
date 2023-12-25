@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { signupPayload } from '../constants/types';
+import { SignupPayload } from '../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
@@ -22,11 +22,11 @@ const Signup = () => {
     password : string().min(4).max(10).required(),
   })
 
-  const {register,handleSubmit,formState : {errors}} = useForm<signupPayload>({
+  const {register,handleSubmit,formState : {errors}} = useForm<SignupPayload>({
     resolver : yupResolver(signupPayloadSchema)
   });
 
-  const onSubmit = async(data : signupPayload)=>{
+  const onSubmit = async(data : SignupPayload)=>{
     const response = await axios.post(API_URL_USER,data);
     if(response.data){
       //successful signup

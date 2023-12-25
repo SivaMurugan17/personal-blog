@@ -5,8 +5,9 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Blog from './components/Blog';
 import NewBlog from './pages/NewBlog';
+import Blog from './pages/Blog';
+import YourBlogs from './pages/YourBlogs';
  
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
             <Route path='/' element={<Home/>}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/signup' element={<Signup/>}/>
-            <Route path='/blog' element={<Blog/>}/>
             <Route path='/new-blog' element={<NewBlog/>}/>
+            <Route path='/blog/:id' element={<Blog/>}/>
+            <Route path='/your-blogs' element={<YourBlogs/>}/>
           </Routes>
           <Footer/>
         </BrowserRouter>
