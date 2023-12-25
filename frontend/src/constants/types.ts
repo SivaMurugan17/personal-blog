@@ -14,3 +14,11 @@ export type blog = {
     content : string,
     authorEmail : string
 }
+
+export type State = {
+    user : {
+        name : string,
+        email : string,
+        password : string
+    }
+}

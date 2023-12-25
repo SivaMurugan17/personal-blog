@@ -6,9 +6,11 @@ import axios from 'axios';
 import { API_URL_USER } from '../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { store } from '../state/store';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -33,9 +35,7 @@ const Login = () => {
     }
     else{
       navigate("/")
-      console.log(store.getState());
-      store.dispatch({type : 'SET', payload : response.data});
-      console.log(response.data);
+      dispatch({type : 'SET', payload : response.data});
     }
   }
 

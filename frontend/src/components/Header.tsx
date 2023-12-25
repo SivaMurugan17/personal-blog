@@ -1,14 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { store } from '../state/store'
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../constants/types';
 
 const Header = () => {
+
+  const dispatch = useDispatch();
+
+  const handleLogout = ()=>{
+    dispatch({type : 'CLEAR'});
+  }
   return (
     <div className='border-b-2 border-slate pb-4 my-4'>
       <nav className='px-8 flex flex-row gap-4'>
-        <Link to="/" className='text-4xl'>A Bored SWE</Link>
+        <Link to="/" className='text-4xl'>A <span className='text-italic'>bored</span> SWE</Link>
         {
-          store.getState().user == null ?
+          useSelector((state : State) => state.user) == null ?
           (
             <>
               <Link to="/login" className='text-2xl ms-auto'>Log in</Link>
@@ -16,7 +23,7 @@ const Header = () => {
             </>
           ):
           (
-            <Link to="/">Log out</Link>
+            <button onClick={handleLogout} className='text-2xl ms-auto'>Log out</button>
           )
         }
       </nav>

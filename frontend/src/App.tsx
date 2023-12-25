@@ -11,17 +11,17 @@ import NewBlog from './pages/NewBlog';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Header/>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/signup' element={<Signup/>}/>
-          <Route path='/blog' element={<Blog/>}/>
-          <Route path='/new-blog' element={<NewBlog/>}/>
-        </Routes>
-        <Footer/>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Header/>
+          <Routes>
+            <Route path='/' element={<Home/>}/>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/signup' element={<Signup/>}/>
+            <Route path='/blog' element={<Blog/>}/>
+            <Route path='/new-blog' element={<NewBlog/>}/>
+          </Routes>
+          <Footer/>
+        </BrowserRouter>
     </div>
   );
 }

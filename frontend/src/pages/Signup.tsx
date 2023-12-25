@@ -6,9 +6,11 @@ import axios from 'axios';
 import { API_URL_USER } from '../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { store } from '../state/store';
+import { useDispatch } from 'react-redux';
 
 const Signup = () => {
+
+  const dispatch = useDispatch();
 
   const [error,setError] = useState("");
 
@@ -29,8 +31,7 @@ const Signup = () => {
     if(response.data){
       //successful signup
       navigate("/");
-      console.log(store.getState());
-      store.dispatch({type : 'SET',payload : data});
+      dispatch({type : 'SET',payload : data});
     }
     else{
       //unsuccessful signup

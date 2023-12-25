@@ -1,20 +1,20 @@
-import { combineReducers, createStore } from "redux";
+import { createStore } from "redux";
 
-const initialState = null;
+const initialState = { user : null};
 
-export const userReducer = (state = null,action)=>{
+export const userReducer = (state = initialState,action)=>{
     switch(action.type){
         case 'SET':
-            return {...state, user : action.payload};
+            return { user : action.payload };
         case 'CLEAR':
-            return {...state, user : null};
+            return initialState;
         default:
             return state;
     }
 }
 
-const combinedReducers = combineReducers({
-    user : userReducer,
-})
+// const combinedReducers = combineReducers({
+//     user : userReducer,
+// })
 
-export const store = createStore(combinedReducers);
+export const store = createStore(userReducer);
