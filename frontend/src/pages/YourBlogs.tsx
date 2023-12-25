@@ -4,6 +4,7 @@ import { API_URL_BLOG } from '../constants/env-variables';
 import { useSelector } from 'react-redux';
 import { State, Blog } from '../constants/types';
 import BlogPreview from '../components/BlogPreview';
+import { Link } from 'react-router-dom';
 
 const YourBlogs = () => {
 
@@ -29,8 +30,11 @@ const YourBlogs = () => {
     <div className='p-8'>
         <h2 className='text-4xl text-left my-4'>Your blogs</h2>
         {
-            blogs.map( (blog : Blog)  => {
-                return <BlogPreview title={blog.title} author={blog.authorEmail}/>
+            blogs.length == 0 && <p className='text-xl'>You have no blogs yet</p>
+        }
+        {
+            blogs.map( (blog : Blog, index)  => {
+                return <Link to={`/blog/${blog.id}`} key={index}><BlogPreview title={blog.title} author={blog.authorEmail} date={blog.date}/></Link>
             }) 
         }
     </div>

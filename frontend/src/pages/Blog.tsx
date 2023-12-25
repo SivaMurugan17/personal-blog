@@ -6,7 +6,7 @@ import { API_URL_BLOG } from '../constants/env-variables';
 const Blog = () => {
     const {id} = useParams();
     
-    const [blog,setBlog] = useState({ title : "", authorEmail : "", content : ""});
+    const [blog,setBlog] = useState({ title : "", authorEmail : "", content : "", date : ""});
 
     const fetchBlog = async()=>{
         try{
@@ -24,7 +24,8 @@ const Blog = () => {
   return (
     <div className='flex flex-col gap-4 w-10/12 mx-auto p-4'>
         <h2 className='text-4xl text-left'>{blog.title}</h2>
-        <p className='text-left italic'>{blog.authorEmail}</p>
+        <p className='text-left italic'>{`- ${blog.authorEmail}`}</p>
+        <p className='text-left'>{new Date(blog.date).toDateString()}</p>
         <p className='text-xl'>{blog.content}</p>
     </div>
   )

@@ -13,7 +13,8 @@ export type Blog = {
     title : string,
     content : string,
     authorEmail : string,
-    id : number
+    id : number,
+    date : Date
 }
 
 export type BlogPayload = {

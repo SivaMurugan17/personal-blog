@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @Entity
 public class Blog {
@@ -14,4 +16,5 @@ public class Blog {
     @Id
     @GeneratedValue
     private long id;
+    private Date date;
 }

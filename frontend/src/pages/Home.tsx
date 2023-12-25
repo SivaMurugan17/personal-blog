@@ -27,8 +27,8 @@ const Home = () => {
             <h1 className='text-3xl text-left'>Recent Blogs</h1>
             <div className='w-10/12 mx-auto flex overflow-x-auto'>
                 {
-                  blogs.map((blog : Blog)=>{
-                    return <Link to={`/blog/${blog.id}`}><BlogPreview title={blog.title} author={blog.authorEmail}/></Link>
+                  blogs.map((blog : Blog, index)=>{
+                    return <Link to={`/blog/${blog.id}`} key={index}><BlogPreview title={blog.title} author={blog.authorEmail} date={blog.date}/></Link>
                   })
                 }
             </div>

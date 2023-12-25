@@ -5,10 +5,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { API_URL_BLOG } from '../constants/env-variables';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const NewBlog = () => {
 
   const user = useSelector((state : State)=> state.user);
+
+  const navigate = useNavigate();
 
   const blogSchema = object({
     title : string().required(),
@@ -26,10 +29,11 @@ const NewBlog = () => {
   const onSubmit = async (data : BlogPayload)=>{
     console.log(data);
     try{
-      const response = await axios.post(API_URL_BLOG,{...data,authorEmail :user.email});
+      const response = await axios.post(API_URL_BLOG,{...data,authorEmail :user.email, date : new Date()});
       if(response.data){
         //successfully posted
         console.log("Successfully posted");
+        navigate('/your-blogs')
       }
       else{
         //some error occured
