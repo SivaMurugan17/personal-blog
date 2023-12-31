@@ -21,6 +21,7 @@ const Blog = () => {
     useEffect(()=>{
        fetchBlog();
     },[])
+    
   return (
     <div className='flex flex-col gap-4 w-10/12 mx-auto p-4'>
         <h2 className='text-4xl text-left'>{blog.title}</h2>

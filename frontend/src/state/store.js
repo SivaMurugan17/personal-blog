@@ -13,8 +13,4 @@ export const userReducer = (state = initialState,action)=>{
     }
 }
 
-// const combinedReducers = combineReducers({
-//     user : userReducer,
-// })
-
 export const store = createStore(userReducer);

@@ -1,8 +1,6 @@
 package com.aboredswe.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,6 +9,8 @@ import java.util.Date;
 @Entity
 public class Blog {
     private String title;
+
+    @Column(columnDefinition = "text")
     private String content;
     private String authorEmail;
     @Id

@@ -11,6 +11,7 @@ const Header = () => {
   const handleLogout = ()=>{
     dispatch({type : 'CLEAR'});
   }
+  
   return (
     <div className='border-b-2 border-slate pb-4 my-4'>
       <nav className='px-8 flex flex-row gap-4'>

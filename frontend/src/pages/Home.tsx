@@ -21,6 +21,7 @@ const Home = () => {
   useEffect(()=>{
     fetchBlogs();
   },[])
+  
   return (
     <div>
         <section className='flex flex-col gap-4 w-10/12 mx-auto'>
