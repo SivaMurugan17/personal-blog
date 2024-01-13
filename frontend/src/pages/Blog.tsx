@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios';
 import { API_URL_BLOG } from '../constants/env-variables';
+import parse from 'html-react-parser';
 
 const Blog = () => {
     const {id} = useParams();
@@ -27,7 +28,7 @@ const Blog = () => {
         <h2 className='text-4xl text-left'>{blog.title}</h2>
         <p className='text-left italic'>{`- ${blog.authorEmail}`}</p>
         <p className='text-left'>{new Date(blog.date).toDateString()}</p>
-        <p className='text-xl'>{blog.content}</p>
+        {parse(`${blog.content}`)}
     </div>
   )
 }

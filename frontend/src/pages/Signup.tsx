@@ -3,10 +3,11 @@ import { SignupPayload } from '../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { API_URL_USER } from '../constants/env-variables';
+import { API_URL_AUTH } from '../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+
 
 const Signup = () => {
 
@@ -27,16 +28,17 @@ const Signup = () => {
   });
 
   const onSubmit = async(data : SignupPayload)=>{
-    const response = await axios.post(API_URL_USER,data);
-    if(response.data){
-      //successful signup
-      navigate("/");
-      dispatch({type : 'SET',payload : data});
-    }
-    else{
-      //unsuccessful signup
-      setError("Sign up failed")
-    }
+    const response = await axios.post(API_URL_AUTH+"/register",data);
+    console.log(response.data);
+    // if(response.data){
+    //   //successful signup
+    //   navigate("/");
+    //   dispatch({type : 'SET',payload : data});
+    // }
+    // else{
+    //   //unsuccessful signup
+    //   setError("Sign up failed")
+    // }
   }
 
   return (
