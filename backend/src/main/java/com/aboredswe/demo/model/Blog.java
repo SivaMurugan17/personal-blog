@@ -1,20 +1,17 @@
 package com.aboredswe.demo.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data
-@Entity
+@Document
 public class Blog {
     private String title;
-
-    @Column(columnDefinition = "text")
     private String content;
     private String authorEmail;
     @Id
-    @GeneratedValue
-    private long id;
+    private String id;
     private Date date;
 }

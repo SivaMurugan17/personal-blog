@@ -25,7 +25,7 @@ public class BlogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Blog> findBlogById(@PathVariable long id){
+    public ResponseEntity<Blog> findBlogById(@PathVariable String id){
         return blogService.findById(id);
     }
 

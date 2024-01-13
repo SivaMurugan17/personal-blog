@@ -38,7 +38,7 @@ public class BlogService {
         return new ResponseEntity<>(array,HttpStatus.OK);
     }
 
-    public ResponseEntity<Blog> findById(long id){
+    public ResponseEntity<Blog> findById(String id){
         Blog foundBlog = (Blog) blogRepository.findById(id).orElse(null);
         if(foundBlog == null){
             return  new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
