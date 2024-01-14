@@ -3,7 +3,7 @@ import { LoginPayload } from '../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { API_URL_USER } from '../constants/env-variables';
+import { API_URL_AUTH } from '../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -26,16 +26,15 @@ const Login = () => {
   });
 
   const onSubmit = async (data : LoginPayload)=>{
-    const response = await axios.get(`${API_URL_USER}/${data.email}`);
-    if(response.data == null){
-      setError("Sign up first")
-    }
-    else if(response.data.password !== data.password){
-      setError("Wrong password")
+    const response = await axios.post(API_URL_AUTH+"/login",data,{
+      withCredentials : true
+    });
+    if(response.data){
+      navigate("/")
+      dispatch({type : 'SET', payload : data});
     }
     else{
-      navigate("/")
-      dispatch({type : 'SET', payload : response.data});
+      setError("Wrong Credentials")
     }
   }
 

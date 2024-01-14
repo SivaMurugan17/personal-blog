@@ -19,7 +19,9 @@ const NewBlog = () => {
   const onSubmit = async (data : BlogPayload)=>{
     try{
       console.log(data);
-      const response = await axios.post(API_URL_BLOG,{...data,authorEmail :user.email, date : new Date()});
+      const response = await axios.post(API_URL_BLOG,{...data,authorEmail :user.email, date : new Date()},{
+        withCredentials : true
+      });
       if(response.data){
         //successfully posted
         console.log("Successfully posted");
@@ -41,8 +43,10 @@ const NewBlog = () => {
         <input placeholder='Title..' className='text-4xl outline-none font-bold' onChange={(e)=>setTitle(e.target.value)}/>
         <button className='bg-black text-white py-1 rounded-lg px-4 ms-auto' onClick={()=>onSubmit({ title : title, content : blogContent, authorEmail : ""})}>Save</button>
       </section>
-      <QuillToolbar/>
-      <ReactQuill theme='snow' value={blogContent} onChange={setBlogContent} id='1' formats={formats} modules={modules}/>
+      <section className='w-4/5 mx-auto'>
+        <QuillToolbar/>
+        <ReactQuill theme='snow' value={blogContent} onChange={setBlogContent} id='1' formats={formats} modules={modules}/>
+      </section>
     </div>
   )
 }

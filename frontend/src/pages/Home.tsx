@@ -10,7 +10,9 @@ const Home = () => {
 
   const fetchBlogs = async ()=>{
     try{
-      const response = await axios.get(API_URL_BLOG);
+      const response = await axios.get(API_URL_BLOG,{
+        withCredentials : true
+      });
       setBlogs(response.data);
     }
     catch(e){

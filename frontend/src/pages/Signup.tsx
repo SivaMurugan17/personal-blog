@@ -28,17 +28,19 @@ const Signup = () => {
   });
 
   const onSubmit = async(data : SignupPayload)=>{
-    const response = await axios.post(API_URL_AUTH+"/register",data);
+    const response = await axios.post(API_URL_AUTH+"/register",data,{
+      withCredentials : true
+    });
     console.log(response.data);
-    // if(response.data){
-    //   //successful signup
-    //   navigate("/");
-    //   dispatch({type : 'SET',payload : data});
-    // }
-    // else{
-    //   //unsuccessful signup
-    //   setError("Sign up failed")
-    // }
+    if(response.data){
+      //successful signup
+      navigate("/");
+      dispatch({type : 'SET',payload : data});
+    }
+    else{
+      //unsuccessful signup
+      setError("Sign up failed")
+    }
   }
 
   return (

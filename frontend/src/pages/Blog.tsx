@@ -11,7 +11,9 @@ const Blog = () => {
 
     const fetchBlog = async()=>{
         try{
-            const response = await axios.get(`${API_URL_BLOG}/${id}`);
+            const response = await axios.get(`${API_URL_BLOG}/${id}`,{
+                withCredentials : true
+            });
             setBlog(response.data);
         }
         catch(e){
