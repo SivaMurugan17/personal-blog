@@ -3,29 +3,44 @@ package com.aboredswe.demo.controller;
 import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Boolean> addUser(@RequestBody User user){
-        return userService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user){
+        User addedUser = userService.addUser(user);
+        if(addedUser == null){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        else{
+            return new ResponseEntity<>(addedUser,HttpStatus.CREATED);
+        }
     }
 
     @GetMapping
-    public ResponseEntity<User[]> findAllUsers(){
-        return userService.findALlUsers();
+    public ResponseEntity<List<User>> findAllUsers(){
+        List<User> users =  userService.findALlUsers();
+        return new ResponseEntity<>(users,HttpStatus.OK);
     }
 
     @GetMapping("/{email}")
     public ResponseEntity<User> findUserByEmail(@PathVariable String email){
-        return userService.findByEmail(email);
+        User foundUser = userService.findByEmail(email);
+        if(foundUser == null){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+        else{
+            return new ResponseEntity<>(foundUser,HttpStatus.OK);
+        }
     }
 }

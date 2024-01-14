@@ -3,49 +3,33 @@ package com.aboredswe.demo.service;
 import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity<Boolean> addUser(User user){
+    public User addUser(User user){
         if(user.getName() == null || user.getEmail() == null || user.getPassword()==null){
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+            return null;
         }
-        else if(userRepository.findByEmail(user.getEmail())!=null){
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        else if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            return null;
         }
         else{
             userRepository.save(user);
-            return new ResponseEntity<>(true,HttpStatus.CREATED);
+            return user;
         }
     }
 
-    public ResponseEntity<User[]> findALlUsers(){
-        Iterator iterator = userRepository.findAll().iterator();
-        ArrayList<User> list = new ArrayList<>();
-        while(iterator.hasNext()){
-            list.add((User) iterator.next());
-        }
-        User[] array = new User[list.size()];
-        for(int i=0;i<array.length;i++) array[i] = list.get(i);
-        return new ResponseEntity<>(array,HttpStatus.OK);
+    public List<User> findALlUsers(){
+        return userRepository.findAll();
     }
 
-    public ResponseEntity<User> findByEmail(String email){
-        User foundUser = userRepository.findByEmail(email);
-        if(foundUser == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-        }
-        else{
-            return new ResponseEntity<>(foundUser,HttpStatus.OK);
-        }
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email).orElse(null);
     }
 }

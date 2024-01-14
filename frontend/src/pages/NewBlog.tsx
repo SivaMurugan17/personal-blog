@@ -44,7 +44,7 @@ const NewBlog = () => {
         <QuillToolbar/>
 
         <div className='textpad my-4'>
-          <div className='flex w-4/5 mx-auto py-4'>
+          <div className='flex p-4'>
             <input className='text-3xl outline-none font-medium'
               placeholder='Title..'  
               onChange={(e)=>setTitle(e.target.value)}/>

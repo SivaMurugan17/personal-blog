@@ -38,52 +38,52 @@ public class AuthController {
     private String COOKIE_NAME = "AuthCookie";
 
     @PostMapping("/register")
-    public ResponseEntity<Boolean> register(@RequestBody RegisterPayload registerPayload){
+    public ResponseEntity<User> register(@RequestBody RegisterPayload registerPayload){
         User user = User.builder()
                 .email(registerPayload.getEmail())
                 .name(registerPayload.getName())
                 .password(passwordEncoder.encode(registerPayload.getPassword()))
                 .role(Role.MEMBER)
                 .build();
-        ResponseEntity<Boolean> response = userService.addUser(user);
-        if(response.getStatusCode().equals(HttpStatus.CREATED)){
+        User savedUser = userService.addUser(user);
+        if(savedUser != null){
             String token = jwtUtil.generateTokenFromUser(user);
             ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
                     .path("/api")
                     .maxAge(24*60*60)
                     .httpOnly(true)
                     .build();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(response.getBody());
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(savedUser);
         }
         else{
-            return response;
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody LoginPayload loginPayload){
+    public ResponseEntity<User> login(@RequestBody LoginPayload loginPayload){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
-        ResponseEntity<User> response = userService.findByEmail(loginPayload.getEmail());
-        if(response.getStatusCode().equals(HttpStatus.NOT_FOUND)){
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        User foundUser = userService.findByEmail(loginPayload.getEmail());
+        if(foundUser == null){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
         else{
-            String token = jwtUtil.generateTokenFromUser(response.getBody());
+            String token = jwtUtil.generateTokenFromUser(foundUser);
             ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
                     .path("/api")
                     .maxAge(60*60*24)
                     .httpOnly(true)
                     .build();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(true);
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(foundUser);
         }
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Boolean> logout(){
+    public ResponseEntity<String> logout(){
         ResponseCookie cleanCookie = ResponseCookie.from(COOKIE_NAME,null)
                 .path("/api")
                 .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cleanCookie.toString()).body(true);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cleanCookie.toString()).body("Successfully logged out");
     }
 
 }
