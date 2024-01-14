@@ -13,14 +13,10 @@ export type Blog = {
     title : string,
     content : string,
     authorEmail : string,
-    id : number,
-    date : Date
-}
-
-export type BlogPayload = {
-    title : string,
-    content : string,
-    authorEmail : string
+    authorName : string,
+    date : Date,
+    tags : string[],
+    id : string
 }
 
 export type State = {

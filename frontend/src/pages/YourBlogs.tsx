@@ -32,11 +32,11 @@ const YourBlogs = () => {
     <div className='p-8'>
         <h2 className='text-4xl text-left my-4'>Your blogs</h2>
         {
-            blogs.length == 0 && <p className='text-xl'>You have no blogs yet</p>
+            blogs.length === 0 && <p className='text-xl'>You have no blogs yet</p>
         }
         {
             blogs.map( (blog : Blog, index)  => {
-                return <Link to={`/blog/${blog.id}`} key={index}><BlogPreview title={blog.title} author={blog.authorEmail} date={blog.date}/></Link>
+                return <Link to={`/blog/${blog.id}`} key={index}><BlogPreview blog={blog}/></Link>
             }) 
         }
     </div>

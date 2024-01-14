@@ -3,11 +3,21 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios';
 import { API_URL_BLOG } from '../constants/env-variables';
 import parse from 'html-react-parser';
+import { Blog } from '../constants/types';
 
-const Blog = () => {
+const BlogComponent = () => {
     const {id} = useParams();
     
-    const [blog,setBlog] = useState({ title : "", authorEmail : "", content : "", date : ""});
+    const initialBlogState : Blog = {
+        title : "",
+        content : "",
+        authorEmail : "",
+        authorName : "",
+        date : new Date(),
+        tags : [],
+        id : ""
+    }
+    const [blog,setBlog] = useState<Blog>(initialBlogState);
 
     const fetchBlog = async()=>{
         try{
@@ -28,11 +38,11 @@ const Blog = () => {
   return (
     <div className='flex flex-col gap-4 w-10/12 mx-auto p-4'>
         <h2 className='text-4xl text-left'>{blog.title}</h2>
-        <p className='text-left italic'>{`- ${blog.authorEmail}`}</p>
+        <p className='text-left italic'>{`- ${blog.authorName}`}</p>
         <p className='text-left'>{new Date(blog.date).toDateString()}</p>
         {parse(`${blog.content}`)}
     </div>
   )
 }
 
-export default Blog
+export default BlogComponent;

@@ -6,7 +6,7 @@ import { Blog } from '../constants/types';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const [blogs,setBlogs] = useState([]); 
+  const [blogs,setBlogs] = useState<Blog[]>([]); 
 
   const fetchBlogs = async ()=>{
     try{
@@ -31,7 +31,11 @@ const Home = () => {
             <div className='w-10/12 mx-auto flex overflow-x-auto'>
                 {
                   blogs.map((blog : Blog, index)=>{
-                    return <Link to={`/blog/${blog.id}`} key={index}><BlogPreview title={blog.title} author={blog.authorEmail} date={blog.date}/></Link>
+                    return (
+                    <Link to={`/blog/${blog.id}`} key={index}>
+                      <BlogPreview blog={blog}/>
+                    </Link>
+                    )
                   })
                 }
             </div>

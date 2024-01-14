@@ -1,4 +1,4 @@
-import { BlogPayload, State } from '../constants/types';
+import { Blog, State } from '../constants/types';
 import axios from 'axios';
 import { API_URL_BLOG } from '../constants/env-variables';
 import { useSelector } from 'react-redux';
@@ -8,19 +8,38 @@ import { useState } from 'react';
 import QuillToolbar, { modules } from '../components/QuillToolbar';
 import { formats } from '../components/QuillToolbar';
 import '../css/NewBlog.css';
+import { BLACK_BUTTON, BLACK_TAG } from '../tailwind/tailwind-classes';
 
 const NewBlog = () => {
 
   const [blogContent,setBlogContent] = useState("");
   const [title,setTitle] = useState("");
+  const [tag,setTag] = useState("");
+  const [tags,setTags] = useState<string[]>([]);
   const user = useSelector((state : State)=> state.user);
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data : BlogPayload)=>{
+  const handleAddTag = ()=>{
+    setTags([...tags,tag])
+    setTag("");
+  }
+
+  const handleRemoveTag = (tagName : string)=>{
+    setTags(tags.filter(singleTag => singleTag !== tagName))
+  }
+
+  const onSubmit = async ()=>{
     try{
-      console.log(data);
-      const response = await axios.post(API_URL_BLOG,{...data,authorEmail :user.email, date : new Date()},{
+      const blogPost = { 
+        title : title, 
+        content : blogContent, 
+        authorEmail : user.email,
+        authorName: user.name,
+        date : new Date(),
+        tags: tags
+      };
+      const response = await axios.post(API_URL_BLOG,blogPost,{
         withCredentials : true
       });
       if(response.data){
@@ -39,20 +58,36 @@ const NewBlog = () => {
   }
 
   return (
-    <div>
-      <section className='w-4/5 mx-auto'>
+    <div className='w-4/5 mx-auto'>
         <QuillToolbar/>
 
         <div className='textpad my-4'>
-          <div className='flex p-4'>
+          <section className='flex p-4'>
             <input className='text-3xl outline-none font-medium'
               placeholder='Title..'  
               onChange={(e)=>setTitle(e.target.value)}/>
-            <button className='bg-black text-white py-1 rounded-lg px-4 ms-auto' 
-              onClick={()=>onSubmit({ title : title, content : blogContent, authorEmail : ""})}>
+            <button className={`${BLACK_BUTTON} ms-auto`}
+              onClick={onSubmit}>
                 Save
             </button>
-          </div>
+          </section>
+
+          <section className='flex p-4 gap-2'>
+            <h3 className='text-xl'>Tags:</h3>
+            {
+              tags.map((tagName,i)=>{
+                return (
+                  <span className={`${BLACK_TAG}`} key={i}>
+                    {tagName} <button onClick={()=>handleRemoveTag(tagName)}>x</button>
+                  </span>
+                )
+              })
+            }
+            <input className='border-2 border-slate-300 outline-none rounded-lg' 
+              onChange={(e)=>setTag(e.target.value)}
+              value={tag}/>
+            <button className={`${BLACK_BUTTON}`} onClick={handleAddTag}>Add</button>
+          </section>
 
           <ReactQuill id='1'
             theme='snow' 
@@ -61,7 +96,6 @@ const NewBlog = () => {
             formats={formats} 
             modules={modules}/>
         </div>
-      </section>
     </div>
   )
 }

@@ -31,11 +31,10 @@ const Signup = () => {
     const response = await axios.post(API_URL_AUTH+"/register",data,{
       withCredentials : true
     });
-    console.log(response.data);
-    if(response.data){
+    if(response.data != null){
       //successful signup
       navigate("/");
-      dispatch({type : 'SET',payload : data});
+      dispatch({type : 'SET',payload : response.data});
     }
     else{
       //unsuccessful signup

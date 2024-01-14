@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NewBlog from './pages/NewBlog';
-import Blog from './pages/Blog';
+import BlogComponent from './pages/BlogComponent';
 import YourBlogs from './pages/YourBlogs';
  
 function App() {
@@ -19,7 +19,7 @@ function App() {
             <Route path='/login' element={<Login/>}/>
             <Route path='/signup' element={<Signup/>}/>
             <Route path='/new-blog' element={<NewBlog/>}/>
-            <Route path='/blog/:id' element={<Blog/>}/>
+            <Route path='/blog/:id' element={<BlogComponent/>}/>
             <Route path='/your-blogs' element={<YourBlogs/>}/>
           </Routes>
           <Footer/>

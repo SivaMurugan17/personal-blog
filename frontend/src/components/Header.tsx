@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../constants/types';
 import axios from 'axios';
 import { API_URL_AUTH } from '../constants/env-variables';
+import { BLACK_BUTTON } from '../tailwind/tailwind-classes';
 
 const Header = () => {
 
@@ -11,7 +12,7 @@ const Header = () => {
   const user = useSelector((state : State) => state.user);
 
   const handleLogout = async ()=>{
-    const response = await axios.post(API_URL_AUTH+"/logout",null,{
+    await axios.post(API_URL_AUTH+"/logout",null,{
       withCredentials : true
     });
     dispatch({type : 'CLEAR'});
@@ -19,13 +20,13 @@ const Header = () => {
   
   return (
     <div className='border-b-2 border-slate pb-4 my-4'>
-      <nav className='px-8 flex flex-row gap-4'>
+      <nav className='px-8 flex flex-row gap-4 text-xl'>
         <Link to="/" className='text-4xl'>A <span className='italic'>bored</span> SWE</Link>
         {
           user == null ?
           (
             <>
-              <Link to="/login" className='bg-black text-white px-4 rounded-lg text-xl ms-auto'>Log in</Link>
+              <Link to="/login" className={`${BLACK_BUTTON} ms-auto`}>Log in</Link>
               <Link to="/signup" className='text-xl'>Sign up</Link>
             </>
           ):
@@ -34,7 +35,7 @@ const Header = () => {
               <Link to="/new-blog" className='text-2xl ms-auto'>New blog</Link>
               <Link to="/your-blogs" className='text-2xl'>Your blogs</Link>
               <p className='text-2xl'>{user.name}</p>
-              <button onClick={handleLogout} className='bg-black text-white px-4 rounded-lg text-xl'>Log out</button>
+              <button onClick={handleLogout} className={`${BLACK_BUTTON}`}>Log out</button>
             </>
           )
         }

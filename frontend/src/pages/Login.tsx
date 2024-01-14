@@ -29,9 +29,9 @@ const Login = () => {
     const response = await axios.post(API_URL_AUTH+"/login",data,{
       withCredentials : true
     });
-    if(response.data){
+    if(response.data != null){
       navigate("/")
-      dispatch({type : 'SET', payload : data});
+      dispatch({type : 'SET', payload : response.data});
     }
     else{
       setError("Wrong Credentials")
