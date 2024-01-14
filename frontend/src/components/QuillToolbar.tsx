@@ -2,16 +2,8 @@ import React from 'react'
 
 export const modules = {
     toolbar: {
-      container: "#toolbar",
-      handlers: {
-    
-      }
+      container: "#toolbar",  //name for editor is given by css selector
     },
-    history: {
-      delay: 500,
-      maxStack: 100,
-      userOnly: true
-    }
   };
 
 export const formats = [
@@ -39,11 +31,14 @@ export const formats = [
 const QuillToolbar = () => {
   return (
     <div id='toolbar'>
+        <span className='ql-formats'>
+          <button className='ql-header' value="1"/>
+          <button className='ql-header' value="2"/>
+        </span>
         <span className="ql-formats">
             <button className="ql-bold" />
             <button className="ql-italic" />
             <button className="ql-underline" />
-            <button className="ql-strike" />
         </span>
         <span className="ql-formats">
             <button className="ql-list" value="ordered" />
@@ -52,10 +47,7 @@ const QuillToolbar = () => {
             <button className="ql-indent" value="+1" />
         </span>
         <span className="ql-formats">
-            <button className="ql-script" value="super" />
-            <button className="ql-script" value="sub" />
             <button className="ql-blockquote" />
-            <button className="ql-direction" />
         </span>
         <span className="ql-formats">
             <select className="ql-align" />
@@ -65,12 +57,10 @@ const QuillToolbar = () => {
         <span className="ql-formats">
             <button className="ql-link" />
             <button className="ql-image" />
-            <button className="ql-video" />
         </span>
         <span className="ql-formats">
-            <button className="ql-formula" />
             <button className="ql-code-block" />
-            <button className="ql-clean" />
+            {/* <button className="ql-clean" /> */}
         </span>
     </div>
   )

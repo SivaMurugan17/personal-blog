@@ -7,6 +7,7 @@ import ReactQuill from 'react-quill';
 import { useState } from 'react';
 import QuillToolbar, { modules } from '../components/QuillToolbar';
 import { formats } from '../components/QuillToolbar';
+import '../css/NewBlog.css';
 
 const NewBlog = () => {
 
@@ -39,13 +40,27 @@ const NewBlog = () => {
 
   return (
     <div>
-      <section className='flex w-4/5 mx-auto my-4'>
-        <input placeholder='Title..' className='text-4xl outline-none font-bold' onChange={(e)=>setTitle(e.target.value)}/>
-        <button className='bg-black text-white py-1 rounded-lg px-4 ms-auto' onClick={()=>onSubmit({ title : title, content : blogContent, authorEmail : ""})}>Save</button>
-      </section>
       <section className='w-4/5 mx-auto'>
         <QuillToolbar/>
-        <ReactQuill theme='snow' value={blogContent} onChange={setBlogContent} id='1' formats={formats} modules={modules}/>
+
+        <div className='textpad my-4'>
+          <div className='flex w-4/5 mx-auto py-4'>
+            <input className='text-3xl outline-none font-medium'
+              placeholder='Title..'  
+              onChange={(e)=>setTitle(e.target.value)}/>
+            <button className='bg-black text-white py-1 rounded-lg px-4 ms-auto' 
+              onClick={()=>onSubmit({ title : title, content : blogContent, authorEmail : ""})}>
+                Save
+            </button>
+          </div>
+
+          <ReactQuill id='1'
+            theme='snow' 
+            value={blogContent} 
+            onChange={setBlogContent}  
+            formats={formats} 
+            modules={modules}/>
+        </div>
       </section>
     </div>
   )

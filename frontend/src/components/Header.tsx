@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../constants/types';
+import axios from 'axios';
+import { API_URL_AUTH } from '../constants/env-variables';
 
 const Header = () => {
 
@@ -8,7 +10,10 @@ const Header = () => {
 
   const user = useSelector((state : State) => state.user);
 
-  const handleLogout = ()=>{
+  const handleLogout = async ()=>{
+    const response = await axios.post(API_URL_AUTH+"/logout",null,{
+      withCredentials : true
+    });
     dispatch({type : 'CLEAR'});
   }
   
