@@ -22,7 +22,7 @@ function App() {
             <Route path='/blog/:id' element={<BlogComponent/>}/>
             <Route path='/your-blogs' element={<YourBlogs/>}/>
           </Routes>
-          <Footer/>
+          {/* <Footer/> */}
         </BrowserRouter>
     </div>
   );
