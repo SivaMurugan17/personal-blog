@@ -8,10 +8,13 @@ import Signup from './pages/Signup';
 import NewBlog from './pages/NewBlog';
 import BlogComponent from './pages/BlogComponent';
 import YourBlogs from './pages/YourBlogs';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
  
 function App() {
+  const queryClient = new QueryClient();
   return (
     <div className="App">
+      <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Header/>
           <Routes>
@@ -24,6 +27,7 @@ function App() {
           </Routes>
           {/* <Footer/> */}
         </BrowserRouter>
+      </QueryClientProvider>
     </div>
   );
 }
