@@ -15,7 +15,7 @@ const Home = () => {
       return data;
   }
 
-  const {data : blogs, isLoading, isError} = useQuery({
+  const {data : blogs, isLoading, isError, error} = useQuery({
     queryKey : ['blogs'],
     queryFn : fetchBlogs
   })
@@ -26,6 +26,7 @@ const Home = () => {
             <h1 className={`${HEADING_H1}`}>Recent Blogs</h1>
             <div className='w-10/12 mx-auto flex overflow-x-auto'>
                 {
+                  isError ? <p>{error.message}</p> :
                   isLoading ? <p>Loading..</p> :
                   blogs.map((blog : Blog, index : number)=>{
                     return (
