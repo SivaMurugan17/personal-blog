@@ -13,6 +13,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,6 +86,19 @@ public class AuthController {
                 .path("/api")
                 .build();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cleanCookie.toString()).body("Successfully logged out");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<User> refresh(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated()){
+            String email = authentication.getName();
+            User user = userService.findByEmail(email);
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(null,HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }
