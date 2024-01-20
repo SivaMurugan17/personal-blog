@@ -26,7 +26,7 @@ const YourBlogs = () => {
 
     useEffect(()=>{
         fetchYourBlogs();
-    },[])
+    },[user])
 
   return (
     <div className='p-8'>
