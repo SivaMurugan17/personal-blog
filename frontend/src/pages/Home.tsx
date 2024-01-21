@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { HEADING_H1 } from '../tailwind/tailwind-classes';
 import { useQuery } from '@tanstack/react-query';
 
+
 const Home = () => {
 
   const fetchBlogs = async ()=>{

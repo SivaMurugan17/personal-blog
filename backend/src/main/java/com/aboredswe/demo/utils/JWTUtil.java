@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
@@ -18,9 +19,11 @@ import java.util.HashMap;
 @Service
 public class JWTUtil {
 
-    private String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    @Value("${jwt.secret.key}")
+    private String SECRET_KEY;
 
-    private String COOKIE_NAME = "AuthCookie";
+    @Value("${jwt.cookie.name}")
+    private String COOKIE_NAME;
 
     public String extractEmailFromToken(String token) {
         Claims claims = Jwts.parserBuilder()

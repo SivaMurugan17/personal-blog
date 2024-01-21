@@ -19,15 +19,20 @@ function App() {
 
   //on every refresh
   const refreshUser = async ()=>{
-    const { data } = await axios.post(API_URL_AUTH+"/refresh",null,{
-      withCredentials : true
-    })
-    //when no cookie, empty string is received
-    if(data === ""){
-      dispatch({ type : 'CLEAR'})
+    try{
+      const { data } = await axios.post(API_URL_AUTH+"/refresh",null,{
+        withCredentials : true
+      })
+      //when no cookie, empty string is received
+      if(data === ""){
+        dispatch({ type : 'CLEAR'})
+      }
+      else{
+        dispatch({ type : 'SET', payload : data});
+      }
     }
-    else{
-      dispatch({ type : 'SET', payload : data});
+    catch(e){
+      console.log(e);
     }
   } 
   

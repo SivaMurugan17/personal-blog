@@ -48,9 +48,12 @@ const BlogComponent = () => {
             :
             <>
                 <h2 className='text-4xl text-left'>{blog.title}</h2>
-                <p className='text-left italic'>{`- ${blog.authorName}`}</p>
-                <p className='text-left'>{new Date(blog.date).toDateString()}</p>
-                <QuillToolbar/> 
+                <section className='flex gap-2'>
+                    <p className='text-left italic'>{`- ${blog.authorName}`} |</p>
+                    <p className='text-left'>{new Date(blog.date).toDateString()}</p>
+                </section>
+                {/* <QuillToolbar/>  */}
+                <div id='toolbar'></div>
                 <ReactQuill id='1'
                     theme='snow' 
                     value={blog.content}

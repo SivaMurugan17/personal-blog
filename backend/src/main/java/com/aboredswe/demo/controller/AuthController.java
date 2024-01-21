@@ -7,6 +7,7 @@ import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.service.UserService;
 import com.aboredswe.demo.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -37,7 +38,8 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private String COOKIE_NAME = "AuthCookie";
+    @Value("${jwt.cookie.name}")
+    private String COOKIE_NAME;
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterPayload registerPayload){
