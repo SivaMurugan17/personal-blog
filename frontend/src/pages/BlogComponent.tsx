@@ -37,7 +37,7 @@ const BlogComponent = () => {
     },[user,blog,isLoading])
     
   return (
-    <div className='flex flex-col gap-4 w-10/12 mx-auto p-4'>
+    <div className='flex flex-col gap-4 w-10/12 mx-auto p-4 max-w-2xl'>
         {
             isLoading ? 
             <SkeletonTheme baseColor="#202020" highlightColor="#444">
@@ -47,7 +47,9 @@ const BlogComponent = () => {
             </SkeletonTheme>
             :
             <>
-                <h2 className='text-4xl text-left'>{blog.title}</h2>
+                <section className='sticky top-0 bg-white z-10 py-4'>
+                    <h2 className='text-4xl text-left'>{blog.title}</h2>
+                </section>
                 <section className='flex gap-2'>
                     <p className='text-left italic'>{`- ${blog.authorName}`} |</p>
                     <p className='text-left'>{new Date(blog.date).toDateString()}</p>

@@ -5,6 +5,7 @@ import { Blog } from '../constants/types';
 import { Link } from 'react-router-dom';
 import { HEADING_H1 } from '../tailwind/tailwind-classes';
 import { useQuery } from '@tanstack/react-query';
+import { ColorRing } from 'react-loader-spinner';
 
 
 const Home = () => {
@@ -25,10 +26,16 @@ const Home = () => {
     <div>
         <section className='flex flex-col gap-4 w-10/12 mx-auto'>
             <h1 className={`${HEADING_H1}`}>Recent Blogs</h1>
-            <div className='w-10/12 mx-auto flex overflow-x-auto'>
+            {
+              isError ? <p>{error.message}</p> :
+              isLoading ? 
+              <p>Loading..</p> :
+              // <ColorRing 
+              //   colors={['#fff','#fff','#fff','#fff','#fff']}
+              //   height={50}
+              //   width={50}/> :
+              <div className='w-10/12 mx-auto flex overflow-x-auto'>
                 {
-                  isError ? <p>{error.message}</p> :
-                  isLoading ? <p>Loading..</p> :
                   blogs.map((blog : Blog, index : number)=>{
                     return (
                     <Link to={`/blog/${blog.id}`} key={index}>
@@ -37,7 +44,8 @@ const Home = () => {
                     )
                   })
                 }
-            </div>
+              </div>
+            }
         </section>
         <section className='w-10/12 mx-auto'>
           <h1 className={`${HEADING_H1}`}>Tags</h1>

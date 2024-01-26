@@ -1,5 +1,9 @@
-export const API_URL_USER = "http://localhost:8080/api/user";
+// export const BACKEND_URL = "https://siva-personalblogbackend.onrender.com"
 
-export const API_URL_BLOG = "http://localhost:8080/api/blog";
+export const BACKEND_URL = "http://localhost:8080";
 
-export const API_URL_AUTH = "http://localhost:8080/api/auth";
+export const API_URL_USER = `${BACKEND_URL}/api/user`;
+
+export const API_URL_BLOG = `${BACKEND_URL}/api/blog`;
+
+export const API_URL_AUTH = `${BACKEND_URL}/api/auth`;

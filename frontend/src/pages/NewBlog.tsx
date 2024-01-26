@@ -61,7 +61,7 @@ const NewBlog = () => {
     <div className='w-4/5 mx-auto'>
         <QuillToolbar/>
 
-        <div className='textpad my-4'>
+        <div className='textpad my-4 max-w-2xl mx-auto'>
           <section className='flex p-4'>
             <input className='text-3xl outline-none font-medium'
               placeholder='Title..'  
