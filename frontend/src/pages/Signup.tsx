@@ -50,12 +50,13 @@ const Signup = () => {
   })
 
   return (
-    <div className='max-w-md mx-auto text-xl'>
+    <div className='text-xl px-8'>
+      <h1 className='text-left text-4xl'>Join us!</h1>
       <form 
         onSubmit={handleSubmit((signupPayload)=>{
           mutation.mutate(signupPayload)
         })} 
-        className='border border-slate shadow-md rounded-lg p-4 flex flex-col gap-2'>
+        className='border border-slate shadow-md rounded-lg p-4 flex flex-col gap-2 max-w-md mx-auto'>
 
         <label className='text-left'>Name</label>
         <input type='text' {...register('name')} className='border-b-2 outline-none'/>

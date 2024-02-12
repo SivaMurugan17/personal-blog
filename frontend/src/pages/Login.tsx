@@ -46,11 +46,12 @@ const Login = () => {
   })
 
   return (
-    <div className='max-w-md mx-auto text-xl'>
+    <div className='text-xl px-8'>
+      <h1 className='text-left text-3xl'>Welcome!</h1>
       <form onSubmit={handleSubmit((loginPayload)=>{
         mutation.mutate(loginPayload)
       })} 
-        className='border border-slate shadow-md rounded-lg p-4 flex flex-col gap-2'>
+        className='border border-slate shadow-md rounded-lg p-4 flex flex-col gap-2 max-w-md mx-auto'>
 
         <label className='text-left'>Email</label>
         <input type='text' {...register('email')} className='border-b-2 outline-none'/>
