@@ -43,8 +43,25 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/author/{email}")
-    public ResponseEntity<List<Blog>> findBlogsByEmail(@PathVariable String email){
+    @GetMapping("/author")
+    public ResponseEntity<List<Blog>> findBlogsByEmail(@RequestParam String email){
         return new ResponseEntity<>(blogService.findBlogsByEmail(email),HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<Blog> editBlog(@RequestBody Blog blog){
+        Blog editedBlog = blogService.editBlog(blog);
+        if(editedBlog == null){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+        else{
+            return new ResponseEntity<>(editedBlog,HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBlog(@PathVariable String id){
+        blogService.deleteBlog(id);
+        return new ResponseEntity<>("Blog deleted",HttpStatus.OK);
     }
 }

@@ -35,4 +35,17 @@ public class BlogService {
     public List<Blog> findBlogsByEmail(String email){
         return blogRepository.findAll().stream().filter(blog -> blog.getAuthorEmail().equals(email)).toList();
     }
+
+    public Blog editBlog(Blog blog) {
+        if(blog.getTitle() == null || blog.getContent() == null || blog.getAuthorEmail() == null){
+            return null;
+        }
+        else{
+            return blogRepository.save(blog);
+        }
+    }
+
+    public void deleteBlog(String id) {
+        blogRepository.deleteById(id);
+    }
 }
