@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios';
-import { API_URL_BLOG } from '../constants/env-variables';
+import { API_URL_BLOG } from '../../constants/env-variables';
 import ReactQuill from 'react-quill';
 import { useSelector } from 'react-redux';
-import { State } from '../constants/types';
-import QuillToolbar, { formats, modules } from '../components/QuillToolbar';
+import { State } from '../../constants/types';
+import QuillToolbar, { formats, modules } from '../../components/QuillToolbar';
 import { useQuery } from '@tanstack/react-query';
 import Skeleton,{ SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";
 
-const BlogComponent = () => {
+const Blog = () => {
     const {id} = useParams();
 
     const user = useSelector((state : State) => state.user);
@@ -68,4 +68,4 @@ const BlogComponent = () => {
   )
 }
 
-export default BlogComponent;
+export default Blog;

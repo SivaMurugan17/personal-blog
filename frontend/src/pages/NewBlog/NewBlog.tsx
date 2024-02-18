@@ -1,14 +1,14 @@
-import { Blog, State } from '../constants/types';
+import { Blog, State } from '../../constants/types';
 import axios from 'axios';
-import { API_URL_BLOG } from '../constants/env-variables';
+import { API_URL_BLOG } from '../../constants/env-variables';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import { useState } from 'react';
-import QuillToolbar, { modules } from '../components/QuillToolbar';
-import { formats } from '../components/QuillToolbar';
-import '../css/NewBlog.css';
-import { BLACK_BUTTON, BLACK_TAG } from '../tailwind/tailwind-classes';
+import QuillToolbar, { modules } from '../../components/QuillToolbar';
+import { formats } from '../../components/QuillToolbar';
+import './NewBlog.css';
+import { BLACK_BUTTON, BLACK_TAG } from '../../constants/tailwind-classes';
 
 const NewBlog = () => {
 

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Blog } from "../constants/types";
-import { BLACK_TAG, ICON_ONLY_BUTTON } from "../tailwind/tailwind-classes";
+import { BLACK_TAG, ICON_ONLY_BUTTON } from "../constants/tailwind-classes";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";

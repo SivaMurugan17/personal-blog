@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../constants/types';
 import axios from 'axios';
 import { API_URL_AUTH } from '../constants/env-variables';
-import { BLACK_BUTTON } from '../tailwind/tailwind-classes';
+import { BLACK_BUTTON } from '../constants/tailwind-classes';
 
 const Header = () => {
 

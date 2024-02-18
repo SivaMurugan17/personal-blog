@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
-import { SignupPayload } from '../constants/types';
+import { SignupPayload } from '../../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { API_URL_AUTH } from '../constants/env-variables';
+import { API_URL_AUTH } from '../../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';

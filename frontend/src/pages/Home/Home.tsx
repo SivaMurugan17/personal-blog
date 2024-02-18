@@ -1,15 +1,15 @@
-import BlogPreview from '../components/BlogPreview'
+import BlogPreview from '../../components/BlogPreview'
 import axios from 'axios';
-import { API_URL_BLOG } from '../constants/env-variables';
-import { Blog } from '../constants/types';
+import { API_URL_BLOG } from '../../constants/env-variables';
+import { Blog } from '../../constants/types';
 import { Link } from 'react-router-dom';
-import { BLACK_TAG, HEADING_H1 } from '../tailwind/tailwind-classes';
+import { BLACK_TAG, HEADING_H1 } from '../../constants/tailwind-classes';
 import { useQuery } from '@tanstack/react-query';
 import { ColorRing } from 'react-loader-spinner';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import SearchBlogs from '../components/SearchBlogs';
+import SearchBlogs from '../../components/SearchBlogs';
 
 
 const Home = () => {

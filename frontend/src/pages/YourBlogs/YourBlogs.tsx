@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
-import { API_URL_BLOG } from '../constants/env-variables';
+import { API_URL_BLOG } from '../../constants/env-variables';
 import { useSelector } from 'react-redux';
-import { State, Blog } from '../constants/types';
-import BlogPreview from '../components/BlogPreview';
+import { State, Blog } from '../../constants/types';
+import BlogPreview from '../../components/BlogPreview';
 import { Link } from 'react-router-dom';
 
 const YourBlogs = () => {

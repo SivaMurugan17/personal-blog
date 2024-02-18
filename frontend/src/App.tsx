@@ -1,17 +1,17 @@
 import './App.css';
 import Header from './components/Header';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import NewBlog from './pages/NewBlog';
-import BlogComponent from './pages/BlogComponent';
-import YourBlogs from './pages/YourBlogs';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import Signup from './pages/Signup/Signup';
+import NewBlog from './pages/NewBlog/NewBlog';
+import YourBlogs from './pages/YourBlogs/YourBlogs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { API_URL_AUTH } from './constants/env-variables';
 import { useDispatch } from 'react-redux';
+import Blog from './pages/Blog/Blog';
  
 function App() {
   const queryClient = new QueryClient();
@@ -50,7 +50,7 @@ function App() {
             <Route path='/login' element={<Login/>}/>
             <Route path='/signup' element={<Signup/>}/>
             <Route path='/new-blog' element={<NewBlog/>}/>
-            <Route path='/blog/:id' element={<BlogComponent/>}/>
+            <Route path='/blog/:id' element={<Blog/>}/>
             <Route path='/your-blogs' element={<YourBlogs/>}/>
           </Routes>
         </BrowserRouter>
