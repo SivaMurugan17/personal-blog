@@ -1,7 +1,7 @@
 package com.aboredswe.demo.utils;
 
 import com.aboredswe.demo.model.User;
-import com.aboredswe.demo.service.UserService;
+import com.aboredswe.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User foundUser = userService.findByEmail(email);
+        User foundUser = authService.findByEmail(email);
         if(foundUser == null){
             throw new  UsernameNotFoundException("User not found :"+email);
         }

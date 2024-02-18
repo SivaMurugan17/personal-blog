@@ -1,4 +1,4 @@
-import { Blog, State } from '../../constants/types';
+import { State } from '../../constants/types';
 import axios from 'axios';
 import { API_URL_BLOG } from '../../constants/env-variables';
 import { useSelector } from 'react-redux';
@@ -83,7 +83,7 @@ const NewBlog = () => {
                 )
               })
             }
-            <input className='border-2 border-slate-300 outline-none rounded-lg' 
+            <input className='border-2 border-slate-300 outline-none rounded-lg p-1' 
               onChange={(e)=>setTag(e.target.value)}
               value={tag}/>
             <button className={`${BLACK_BUTTON}`} onClick={handleAddTag}>Add</button>

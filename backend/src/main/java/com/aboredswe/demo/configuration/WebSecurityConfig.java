@@ -51,8 +51,10 @@ public class WebSecurityConfig {
         http.cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests( authz -> authz.requestMatchers("/api/auth/**",
+                .authorizeHttpRequests( authz -> authz.
+                        requestMatchers("/api/auth/**",
                                 "/api/blog/**",
+                                "/api/tag/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())

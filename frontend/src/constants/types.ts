@@ -26,3 +26,8 @@ export type State = {
         password : string
     }
 }
+
+export type Tag = {
+    name : string,
+    blogs : string[]
+}

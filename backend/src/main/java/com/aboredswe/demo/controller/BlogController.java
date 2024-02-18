@@ -1,6 +1,7 @@
 package com.aboredswe.demo.controller;
 
 import com.aboredswe.demo.model.Blog;
+import com.aboredswe.demo.model.LikePayload;
 import com.aboredswe.demo.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,5 +70,17 @@ public class BlogController {
     public ResponseEntity<List<Blog>> search(@RequestParam String title){
         List<Blog> result = blogService.search(title);
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<Blog> addLike(@RequestBody LikePayload likePayload){
+        Blog savedBlog = blogService.addLike(likePayload.getUserEmail(),likePayload.getBlogId());
+        return new ResponseEntity<>(savedBlog,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity<Blog> removeLike(@RequestBody LikePayload likePayload){
+        Blog savedBlog = blogService.removeLike(likePayload.getUserEmail(),likePayload.getBlogId());
+        return new ResponseEntity<>(savedBlog,HttpStatus.OK);
     }
 }

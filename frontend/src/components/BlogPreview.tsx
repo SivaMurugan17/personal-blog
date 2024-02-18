@@ -4,6 +4,8 @@ import { BLACK_TAG, ICON_ONLY_BUTTON } from "../constants/tailwind-classes";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { API_URL_BLOG } from "../constants/env-variables";
 
 
 const BlogPreview = (props : {blog : Blog}) => {
@@ -13,8 +15,9 @@ const BlogPreview = (props : {blog : Blog}) => {
     console.log("Edited")
   }
 
-  const handleDelete = (id : string)=>{
-    console.log("Deleted")
+  const handleDelete = async(id : string)=>{
+    await axios.delete(`${API_URL_BLOG}/${id}`);
+    console.log("deleted");
   }
 
   return (
@@ -26,8 +29,8 @@ const BlogPreview = (props : {blog : Blog}) => {
               <p>{new Date(blog.date).toDateString()}</p>
               <div className="flex gap-1">
                 {
-                  blog.tags?.map((tag)=>{
-                    return <span className={`${BLACK_TAG}`}>{tag}</span>
+                  blog.tags?.map((tag :string, index : number)=>{
+                    return <span className={`${BLACK_TAG}`} key={index}>{tag}</span>
                   })
                 }
               </div>  

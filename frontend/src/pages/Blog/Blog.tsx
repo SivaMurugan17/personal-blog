@@ -5,7 +5,7 @@ import { API_URL_BLOG } from '../../constants/env-variables';
 import ReactQuill from 'react-quill';
 import { useSelector } from 'react-redux';
 import { State } from '../../constants/types';
-import QuillToolbar, { formats, modules } from '../../components/QuillToolbar';
+import { formats, modules } from '../../components/QuillToolbar';
 import { useQuery } from '@tanstack/react-query';
 import Skeleton,{ SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";

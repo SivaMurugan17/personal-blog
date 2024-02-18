@@ -4,7 +4,6 @@ import { API_URL_BLOG } from '../../constants/env-variables';
 import { useSelector } from 'react-redux';
 import { State, Blog } from '../../constants/types';
 import BlogPreview from '../../components/BlogPreview';
-import { Link } from 'react-router-dom';
 
 const YourBlogs = () => {
 
@@ -36,7 +35,7 @@ const YourBlogs = () => {
         }
         {
             blogs.map( (blog : Blog, index)  => {
-                return <BlogPreview blog={blog}/>
+                return <BlogPreview blog={blog} key={index}/>
             }) 
         }
     </div>

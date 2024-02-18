@@ -1,5 +1,6 @@
 package com.aboredswe.demo.model;
 
+
 import lombok.Data;
 import org.springframework.stereotype.Component;
 

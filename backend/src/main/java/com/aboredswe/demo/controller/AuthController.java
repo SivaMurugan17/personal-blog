@@ -4,7 +4,7 @@ import com.aboredswe.demo.model.LoginPayload;
 import com.aboredswe.demo.model.RegisterPayload;
 import com.aboredswe.demo.model.Role;
 import com.aboredswe.demo.model.User;
-import com.aboredswe.demo.service.UserService;
+import com.aboredswe.demo.service.AuthService;
 import com.aboredswe.demo.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,7 +49,7 @@ public class AuthController {
                 .password(passwordEncoder.encode(registerPayload.getPassword()))
                 .role(Role.MEMBER)
                 .build();
-        User savedUser = userService.addUser(user);
+        User savedUser = authService.addUser(user);
         if(savedUser != null){
             String token = jwtUtil.generateTokenFromUser(user);
             ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
@@ -67,7 +67,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody LoginPayload loginPayload){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
-        User foundUser = userService.findByEmail(loginPayload.getEmail());
+        User foundUser = authService.findByEmail(loginPayload.getEmail());
         if(foundUser == null){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
@@ -95,7 +95,7 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()){
             String email = authentication.getName();
-            User user = userService.findByEmail(email);
+            User user = authService.findByEmail(email);
             return new ResponseEntity<>(user,HttpStatus.OK);
         }
         else{
