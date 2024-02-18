@@ -7,6 +7,9 @@ import { BLACK_TAG, HEADING_H1 } from '../tailwind/tailwind-classes';
 import { useQuery } from '@tanstack/react-query';
 import { ColorRing } from 'react-loader-spinner';
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import SearchBlogs from '../components/SearchBlogs';
 
 
 const Home = () => {
@@ -36,6 +39,7 @@ const Home = () => {
   
   return (
     <div>
+        <SearchBlogs/>
         <section className='flex flex-col gap-4 w-10/12 mx-auto'>
             <h1 className={`${HEADING_H1}`}>Recent Blogs</h1>
             {
@@ -50,9 +54,7 @@ const Home = () => {
                 {
                   blogs.map((blog : Blog, index : number)=>{
                     return (
-                    <Link to={`/blog/${blog.id}`} key={index}>
                       <BlogPreview blog={blog}/>
-                    </Link>
                     )
                   })
                 }

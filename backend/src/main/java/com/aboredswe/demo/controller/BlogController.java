@@ -64,4 +64,10 @@ public class BlogController {
         blogService.deleteBlog(id);
         return new ResponseEntity<>("Blog deleted",HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Blog>> search(@RequestParam String title){
+        List<Blog> result = blogService.search(title);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
 }

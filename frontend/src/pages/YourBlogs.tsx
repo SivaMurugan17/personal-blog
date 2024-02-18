@@ -14,7 +14,7 @@ const YourBlogs = () => {
 
     const fetchYourBlogs = async()=>{
         try{
-            const response = await axios.get(`${API_URL_BLOG}?author=${user.email}`,{
+            const response = await axios.get(`${API_URL_BLOG}/author?email=${user.email}`,{
                 withCredentials : true
             })
             setBlogs(response.data);
@@ -36,7 +36,7 @@ const YourBlogs = () => {
         }
         {
             blogs.map( (blog : Blog, index)  => {
-                return <Link to={`/blog/${blog.id}`} key={index}><BlogPreview blog={blog}/></Link>
+                return <BlogPreview blog={blog}/>
             }) 
         }
     </div>

@@ -48,4 +48,12 @@ public class BlogService {
     public void deleteBlog(String id) {
         blogRepository.deleteById(id);
     }
+
+    public List<Blog> search(String keyword) {
+        List<Blog> allBlogs = blogRepository.findAll();
+        return allBlogs
+                .stream().
+                filter(blog -> blog.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
+                .toList();
+    }
 }
