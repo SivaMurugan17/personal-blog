@@ -6,6 +6,7 @@ import com.aboredswe.demo.model.Role;
 import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.service.AuthService;
 import com.aboredswe.demo.utils.JWTUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -42,7 +43,7 @@ public class AuthController {
     private String COOKIE_NAME;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterPayload registerPayload){
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterPayload registerPayload){
         User user = User.builder()
                 .email(registerPayload.getEmail())
                 .name(registerPayload.getName())
@@ -65,7 +66,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginPayload loginPayload){
+    public ResponseEntity<User> login(@Valid @RequestBody LoginPayload loginPayload){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
         User foundUser = authService.findByEmail(loginPayload.getEmail());
         if(foundUser == null){

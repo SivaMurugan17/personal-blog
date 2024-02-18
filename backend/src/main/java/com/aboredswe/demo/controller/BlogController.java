@@ -3,6 +3,7 @@ package com.aboredswe.demo.controller;
 import com.aboredswe.demo.model.Blog;
 import com.aboredswe.demo.model.LikePayload;
 import com.aboredswe.demo.service.BlogService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class BlogController {
     private BlogService blogService;
 
     @PostMapping
-    public ResponseEntity<Blog> addBlog(@RequestBody Blog blog){
+    public ResponseEntity<Blog> addBlog(@Valid @RequestBody Blog blog){
         Blog savedBlog = blogService.addBlog(blog);
         if(savedBlog == null){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -50,7 +51,7 @@ public class BlogController {
     }
 
     @PutMapping
-    public ResponseEntity<Blog> editBlog(@RequestBody Blog blog){
+    public ResponseEntity<Blog> editBlog(@Valid @RequestBody Blog blog){
         Blog editedBlog = blogService.editBlog(blog);
         if(editedBlog == null){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);

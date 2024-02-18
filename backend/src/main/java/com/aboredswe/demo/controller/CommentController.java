@@ -3,6 +3,7 @@ package com.aboredswe.demo.controller;
 import com.aboredswe.demo.model.Comment;
 import com.aboredswe.demo.model.CommentPayload;
 import com.aboredswe.demo.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<Comment> postComment(@RequestBody CommentPayload commentPayload){
+    public ResponseEntity<Comment> postComment(@Valid @RequestBody CommentPayload commentPayload){
         Comment savedComment = commentService.postComment(commentPayload);
         return new ResponseEntity<>(savedComment,HttpStatus.OK);
     }

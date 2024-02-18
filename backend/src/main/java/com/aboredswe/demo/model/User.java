@@ -1,5 +1,8 @@
 package com.aboredswe.demo.model;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -15,11 +18,20 @@ import java.util.List;
 @Builder
 @Document
 public class User implements UserDetails {
+
+    @NotBlank(message = "Name should not be blank")
     private String name;
+
+    @NotNull
+    @Email
     private String email;
+
+    @NotBlank(message = "Password should not be blank")
     private String password;
+
     @Id
     private String id;
+
     private Role role;
 
     @Override
