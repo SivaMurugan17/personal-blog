@@ -1,11 +1,10 @@
 package com.aboredswe.demo.model;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 import java.util.List;
@@ -15,20 +14,17 @@ import java.util.List;
 @Document
 public class Blog {
 
+    @Id
+    private String id;
+
     @NotBlank(message = "Title should not be empty")
     private String title;
 
     @NotBlank(message = "Content should not be empty")
     private String content;
 
-    @NotNull
-    @Email
-    private String authorEmail;
-
-    private String authorName;
-
-    @Id
-    private String id;
+    @DBRef
+    private User author;
 
     private Date date;
 

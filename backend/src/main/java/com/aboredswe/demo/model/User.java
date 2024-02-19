@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,9 @@ import java.util.List;
 @Document
 public class User implements UserDetails {
 
+    @Id
+    private String id;
+
     @NotBlank(message = "Name should not be blank")
     private String name;
 
@@ -29,10 +33,10 @@ public class User implements UserDetails {
     @NotBlank(message = "Password should not be blank")
     private String password;
 
-    @Id
-    private String id;
-
     private Role role;
+
+    @DBRef
+    private List<Blog> blogs;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
