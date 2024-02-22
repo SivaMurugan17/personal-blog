@@ -26,31 +26,26 @@ public class BlogService {
     private BlogRepository blogRepository;
 
     public Blog addBlog(Blog blog){
-        if(blog.getTitle() == null || blog.getContent() == null || blog.getAuthorEmail() == null){
-            return null;
+        // add a head comment
+        CommentPayload dummyPayload = CommentPayload.builder()
+                .text("")
+                .authorEmail("")
+                .previousCommentId("")
+                .build();
+        Comment headComment = commentService.postComment(dummyPayload);
+        blog.setNextCommentId(headComment.getId());
+
+        //set initial likes
+        blog.setLikedBy(new ArrayList<>());
+        Blog savedBlog = blogRepository.save(blog);
+
+        // add tags, if present
+        for(String tagName : blog.getTags()) {
+            tagService.addTag(tagName.toLowerCase(), savedBlog.getId());
         }
-        else{
-            // add a head comment
-            CommentPayload dummyPayload = CommentPayload.builder()
-                    .text("")
-                    .authorEmail("")
-                    .previousCommentId("")
-                    .build();
-            Comment headComment = commentService.postComment(dummyPayload);
-            blog.setNextCommentId(headComment.getId());
 
-            //set initial likes
-            blog.setLikedBy(new ArrayList<>());
-            Blog savedBlog = blogRepository.save(blog);
-
-            // add tags, if present
-            for(String tagName : blog.getTags()) {
-                tagService.addTag(tagName.toLowerCase(), savedBlog.getId());
-            }
-
-            log.info("Blog added, id : {}",savedBlog.getId());
-            return savedBlog;
-        }
+        log.info("Blog added, id : {}",savedBlog.getId());
+        return savedBlog;
     }
 
     public List<Blog> findAllBlogs(){
@@ -62,16 +57,11 @@ public class BlogService {
     }
 
     public List<Blog> findBlogsByEmail(String email){
-        return blogRepository.findAll().stream().filter(blog -> blog.getAuthorEmail().equals(email)).toList();
+        return blogRepository.findAll().stream().filter(blog -> blog.getAuthor().getEmail().equals(email)).toList();
     }
 
     public Blog editBlog(Blog blog) {
-        if(blog.getTitle() == null || blog.getContent() == null || blog.getAuthorEmail() == null){
-            return null;
-        }
-        else{
-            return blogRepository.save(blog);
-        }
+        return blogRepository.save(blog);
     }
 
     public void deleteBlog(String id) {

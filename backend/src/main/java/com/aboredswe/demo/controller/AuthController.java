@@ -1,5 +1,7 @@
 package com.aboredswe.demo.controller;
 
+import com.aboredswe.demo.error.UserAlreadyExistsException;
+import com.aboredswe.demo.error.WrongPasswordException;
 import com.aboredswe.demo.model.LoginPayload;
 import com.aboredswe.demo.model.RegisterPayload;
 import com.aboredswe.demo.model.Role;
@@ -7,6 +9,7 @@ import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.service.AuthService;
 import com.aboredswe.demo.utils.JWTUtil;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -43,7 +47,11 @@ public class AuthController {
     private String COOKIE_NAME;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterPayload registerPayload){
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterPayload registerPayload) throws UserAlreadyExistsException {
+        User foundUser = authService.findByEmail(registerPayload.getEmail());
+        if(foundUser != null){
+            throw new UserAlreadyExistsException("User already exists");
+        }
         User user = User.builder()
                 .email(registerPayload.getEmail())
                 .name(registerPayload.getName())
@@ -51,26 +59,24 @@ public class AuthController {
                 .role(Role.MEMBER)
                 .build();
         User savedUser = authService.addUser(user);
-        if(savedUser != null){
-            String token = jwtUtil.generateTokenFromUser(user);
-            ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
-                    .path("/api")
-                    .maxAge(24*60*60)
-                    .httpOnly(true)
-                    .build();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(savedUser);
-        }
-        else{
-            return ResponseEntity.badRequest().body(null);
-        }
+        String token = jwtUtil.generateTokenFromUser(user);
+        ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
+                .path("/api")
+                .maxAge(24*60*60)
+                .httpOnly(true)
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(savedUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@Valid @RequestBody LoginPayload loginPayload){
+    public ResponseEntity<User> login(@Valid @RequestBody LoginPayload loginPayload) throws WrongPasswordException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
         User foundUser = authService.findByEmail(loginPayload.getEmail());
         if(foundUser == null){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+        else if(!passwordEncoder.matches(loginPayload.getPassword(),foundUser.getPassword())){
+            throw new WrongPasswordException("Wrong password.");
         }
         else{
             String token = jwtUtil.generateTokenFromUser(foundUser);
