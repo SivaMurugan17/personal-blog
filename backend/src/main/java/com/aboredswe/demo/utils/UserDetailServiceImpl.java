@@ -1,5 +1,6 @@
 package com.aboredswe.demo.utils;
 
+import com.aboredswe.demo.error.UserNotFoundException;
 import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User foundUser = authService.findByEmail(email);
-        if(foundUser == null){
+        try {
+            User foundUser = authService.findByEmail(email);
+            return new org.springframework.security.core.userdetails
+                    .User(
+                    foundUser.getEmail(),
+                    foundUser.getPassword(),
+                    new ArrayList<>());
+        } catch (UserNotFoundException e) {
             throw new  UsernameNotFoundException("User not found :"+email);
         }
-        return new org.springframework.security.core.userdetails.User(foundUser.getEmail(), foundUser.getPassword(), new ArrayList<>());
     }
 }

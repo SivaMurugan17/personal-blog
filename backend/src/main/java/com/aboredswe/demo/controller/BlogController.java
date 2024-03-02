@@ -1,5 +1,6 @@
 package com.aboredswe.demo.controller;
 
+import com.aboredswe.demo.error.BlogNotFoundException;
 import com.aboredswe.demo.model.Blog;
 import com.aboredswe.demo.model.LikePayload;
 import com.aboredswe.demo.service.BlogService;
@@ -21,12 +22,7 @@ public class BlogController {
     @PostMapping
     public ResponseEntity<Blog> addBlog(@Valid @RequestBody Blog blog){
         Blog savedBlog = blogService.addBlog(blog);
-        if(savedBlog == null){
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-        else{
-            return new ResponseEntity<>(savedBlog,HttpStatus.CREATED);
-        }
+        return new ResponseEntity<>(savedBlog,HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -36,12 +32,11 @@ public class BlogController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Blog> findBlogById(@PathVariable String id){
-        Blog foundBlog = blogService.findById(id);
-        if(foundBlog == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-        }
-        else{
+        try {
+            Blog foundBlog = blogService.findById(id);
             return new ResponseEntity<>(foundBlog,HttpStatus.OK);
+        } catch (BlogNotFoundException e) {
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
 
@@ -53,12 +48,7 @@ public class BlogController {
     @PutMapping
     public ResponseEntity<Blog> editBlog(@Valid @RequestBody Blog blog){
         Blog editedBlog = blogService.editBlog(blog);
-        if(editedBlog == null){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
-        }
-        else{
-            return new ResponseEntity<>(editedBlog,HttpStatus.OK);
-        }
+        return new ResponseEntity<>(editedBlog,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

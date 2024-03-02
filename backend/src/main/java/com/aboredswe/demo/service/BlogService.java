@@ -1,6 +1,7 @@
 package com.aboredswe.demo.service;
 
 
+import com.aboredswe.demo.error.BlogNotFoundException;
 import com.aboredswe.demo.model.Blog;
 import com.aboredswe.demo.model.Comment;
 import com.aboredswe.demo.model.CommentPayload;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -52,8 +54,12 @@ public class BlogService {
         return blogRepository.findAll();
     }
 
-    public Blog findById(String id){
-        return blogRepository.findById(id).orElse(null);
+    public Blog findById(String id) throws BlogNotFoundException {
+        Optional<Blog> foundBlog = blogRepository.findById(id);
+        if(foundBlog.isEmpty()){
+            throw new BlogNotFoundException();
+        }
+        return foundBlog.get();
     }
 
     public List<Blog> findBlogsByEmail(String email){
