@@ -2,6 +2,7 @@ package com.aboredswe.demo.configuration;
 
 import com.aboredswe.demo.utils.AuthFilter;
 import com.aboredswe.demo.utils.UserDetailServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -40,6 +42,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
+        log.info("Entered authentication provider");
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -48,6 +51,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        log.info("Entered security filter chain");
         http.cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -65,6 +69,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        log.info("Entered authentication manager, configuration :{}",configuration);
         return configuration.getAuthenticationManager();
     }
 

@@ -1,7 +1,6 @@
 package com.aboredswe.demo.controller;
 
-import com.aboredswe.demo.error.UserAlreadyExistsException;
-import com.aboredswe.demo.error.WrongPasswordException;
+import com.aboredswe.demo.error.AuthException;
 import com.aboredswe.demo.model.LoginPayload;
 import com.aboredswe.demo.model.RegisterPayload;
 import com.aboredswe.demo.model.Role;
@@ -16,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,10 +47,10 @@ public class AuthController {
     private String COOKIE_NAME;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterPayload registerPayload) throws UserAlreadyExistsException {
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterPayload registerPayload) throws AuthException {
         User foundUser = authService.findByEmail(registerPayload.getEmail());
         if(foundUser != null){
-            throw new UserAlreadyExistsException("User already exists");
+            throw new AuthException("User already exists");
         }
         User user = User.builder()
                 .email(registerPayload.getEmail())
@@ -69,24 +69,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@Valid @RequestBody LoginPayload loginPayload) throws WrongPasswordException {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
+    public ResponseEntity<User> login(@Valid @RequestBody LoginPayload loginPayload) throws AuthException {
         User foundUser = authService.findByEmail(loginPayload.getEmail());
         if(foundUser == null){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+            throw new AuthException("Email not registered");
         }
         else if(!passwordEncoder.matches(loginPayload.getPassword(),foundUser.getPassword())){
-            throw new WrongPasswordException("Wrong password.");
+            throw new AuthException("Wrong password");
         }
-        else{
-            String token = jwtUtil.generateTokenFromUser(foundUser);
-            ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
-                    .path("/api")
-                    .maxAge(60*60*24)
-                    .httpOnly(true)
-                    .build();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(foundUser);
-        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
+        String token = jwtUtil.generateTokenFromUser(foundUser);
+        ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME,token)
+                .path("/api")
+                .maxAge(60*60*24)
+                .httpOnly(true)
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(foundUser);
     }
 
     @PostMapping("/logout")

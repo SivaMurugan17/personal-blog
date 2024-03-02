@@ -33,6 +33,7 @@ const Signup = () => {
     const { data } = await axios.post(API_URL_AUTH+"/register",signupPayload,{
       withCredentials : true
     });
+    console.log(data)
     if(data != null){
       //successful signup
       navigate("/");
@@ -82,7 +83,7 @@ const Signup = () => {
             }
         </button>
 
-        <p>{error}</p>
+        {mutation.isError && <p>Error</p>}
       </form>
     </div>
   )

@@ -5,16 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
+
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(WrongPasswordException.class)
-    public ResponseEntity<String> handleWrongPasswordException(Exception ex){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<Error> handleWrongPasswordException(Exception ex){
+        return new ResponseEntity<>(Error.builder().error(ex.getMessage()).build()
+                , HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<String> handleUserAlreadyExistsException(Exception ex){
-        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
-    }
 }

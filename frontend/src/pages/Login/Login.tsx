@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { API_URL_AUTH } from '../../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { ColorRing } from 'react-loader-spinner';
@@ -36,7 +36,7 @@ const Login = () => {
       dispatch({type : 'SET', payload : data});
     }
     else{
-      setError("Wrong Credentials")
+      setError(data);
     }
     return data;
   }
@@ -44,6 +44,10 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn : onSubmit
   })
+
+  useEffect(()=>{
+    console.log(error)
+  },[error])
 
   return (
     <div className='text-xl px-8'>
