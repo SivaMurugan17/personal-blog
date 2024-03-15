@@ -9,13 +9,15 @@ import { formats, modules } from '../../components/QuillToolbar';
 import { useQuery } from '@tanstack/react-query';
 import Skeleton,{ SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";
+import CommentSection from './components/CommentSection';
 
 const Blog = () => {
     const {id} = useParams();
 
     const user = useSelector((state : State) => state.user);
     
-    const [allowEdit,setAllowEdit] = useState(false);
+    const [ allowEdit,setAllowEdit ] = useState(false);
+    
 
     const fetchBlog = async()=>{
         const { data } = await axios.get(`${API_URL_BLOG}/${id}`,{
@@ -51,7 +53,7 @@ const Blog = () => {
                     <h2 className='text-4xl text-left'>{blog.title}</h2>
                 </section>
                 <section className='flex gap-2'>
-                    <p className='text-left italic'>{`- ${blog.authorName}`} |</p>
+                    <p className='text-left italic'>{`- ${blog.author.name}`} |</p>
                     <p className='text-left'>{new Date(blog.date).toDateString()}</p>
                 </section>
                 {/* <QuillToolbar/>  */}
@@ -62,6 +64,7 @@ const Blog = () => {
                     modules={modules}
                     formats={formats}
                     readOnly/>
+                <CommentSection blog={blog}/>
             </>
         }
     </div>

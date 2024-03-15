@@ -9,14 +9,24 @@ export type LoginPayload = {
     password : string
 }
 
+export type User = {
+    id : string,
+    name : string,
+    email : string,
+    password : string,
+    role : string,
+    blogs : Blog[],
+}
+
 export type Blog = {
+    id : string,
     title : string,
     content : string,
-    authorEmail : string,
-    authorName : string,
+    author : User,
     date : Date,
     tags : string[],
-    id : string
+    likedBy : string[],
+    comments : Comment[]
 }
 
 export type State = {
@@ -30,4 +40,11 @@ export type State = {
 export type Tag = {
     name : string,
     blogs : string[]
+}
+
+export type Comment = {
+    id : string,
+    text : string,
+    commentedBy : User,
+    date : string
 }

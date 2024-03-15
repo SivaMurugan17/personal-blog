@@ -64,6 +64,7 @@ public class AuthController {
             User savedUser = authService.addUser(user);
             String token = jwtUtil.generateTokenFromUser(user);
             ResponseCookie cookie = createCookie(token);
+            log.info("Request: POST /auth/register, User registered: {}",savedUser);
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.SET_COOKIE,cookie.toString())
@@ -81,6 +82,7 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getEmail(),loginPayload.getPassword()));
             String token = jwtUtil.generateTokenFromUser(foundUser);
             ResponseCookie cookie = createCookie(token);
+            log.info("Request: POST /auth/login, User loggedin: {}",foundUser);
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.SET_COOKIE,cookie.toString())
@@ -93,6 +95,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(){
         ResponseCookie cleanCookie = createCookie(null);
+        log.info("Request: POST /auth/logout, User logged out");
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.SET_COOKIE,cleanCookie.toString())
@@ -106,6 +109,7 @@ public class AuthController {
             String email = authentication.getName();
             try {
                 User user = authService.findByEmail(email);
+                log.info("Request: POST /auth/refresh, User refreshed: {}",user);
                 return new ResponseEntity<>(user,HttpStatus.OK);
             } catch (UserNotFoundException e) {
                 return new ResponseEntity<>(null,HttpStatus.UNAUTHORIZED);

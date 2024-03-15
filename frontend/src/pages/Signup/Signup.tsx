@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { ColorRing } from 'react-loader-spinner';
+import { INPUT_BOX_WITH_BOTTOM_LINE } from '../../constants/tailwind-classes';
 
 
 const Signup = () => {
@@ -60,15 +61,15 @@ const Signup = () => {
         className='border border-slate shadow-md rounded-lg p-4 flex flex-col gap-2 max-w-md mx-auto'>
 
         <label className='text-left'>Name</label>
-        <input type='text' {...register('name')} className='border-b-2 outline-none'/>
+        <input type='text' {...register('name')} className={`${INPUT_BOX_WITH_BOTTOM_LINE}`}/>
         <p className='text-red-600'>{errors.name?.message}</p>
 
         <label className='text-left'>Email</label>
-        <input type='text' {...register('email')} className='border-b-2 outline-none'/>
+        <input type='text' {...register('email')} className={`${INPUT_BOX_WITH_BOTTOM_LINE}`}/>
         <p className='text-red-600'>{errors.email?.message}</p>
 
         <label className='text-left'>Password</label>
-        <input type='password' {...register('password')} className='border-b-2 outline-none'/>
+        <input type='password' {...register('password')} className={`${INPUT_BOX_WITH_BOTTOM_LINE}`}/>
         <p className='text-red-600'>{errors.password?.message}</p>
 
         <button className='bg-black text-white py-1 rounded-lg flex flex-row items-center justify-center'>

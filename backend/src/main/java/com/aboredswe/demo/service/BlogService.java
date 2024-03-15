@@ -2,54 +2,57 @@ package com.aboredswe.demo.service;
 
 
 import com.aboredswe.demo.error.BlogNotFoundException;
+import com.aboredswe.demo.error.TagNotFoundException;
+import com.aboredswe.demo.error.UserNotFoundException;
 import com.aboredswe.demo.model.Blog;
+import com.aboredswe.demo.model.BlogPostPayload;
 import com.aboredswe.demo.model.Comment;
-import com.aboredswe.demo.model.CommentPayload;
+import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.repository.BlogRepository;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class BlogService {
-
-    @Autowired
-    private CommentService commentService;
-
     @Autowired
     private TagService tagService;
 
     @Autowired
     private BlogRepository blogRepository;
 
-    public Blog addBlog(Blog blog){
-        // add a head comment
-        CommentPayload dummyPayload = CommentPayload.builder()
-                .text("")
-                .authorEmail("")
-                .previousCommentId("")
-                .build();
-        Comment headComment = commentService.postComment(dummyPayload);
-        blog.setNextCommentId(headComment.getId());
+    @Autowired
+    private AuthService authService;
 
-        //set initial likes
-        blog.setLikedBy(new ArrayList<>());
-        Blog savedBlog = blogRepository.save(blog);
-
-        // add tags, if present
-        for(String tagName : blog.getTags()) {
-            tagService.addTag(tagName.toLowerCase(), savedBlog.getId());
-        }
-
-        log.info("Blog added, id : {}",savedBlog.getId());
-        return savedBlog;
+    public Blog addBlog(@Valid BlogPostPayload blogPostPayload) throws UserNotFoundException {
+        Blog blog = blogRepository.save(buildBlog(blogPostPayload));
+        addTags(blog);
+        return blog;
     }
 
+    private Blog buildBlog(BlogPostPayload blogPostPayload) throws UserNotFoundException {
+        User foundUser = authService.findByEmail(blogPostPayload.getAuthorEmail());
+        return Blog.builder()
+                .title(blogPostPayload.getTitle())
+                .content(blogPostPayload.getContent())
+                .author(foundUser)
+                .date(new Date())
+                .tags(blogPostPayload.getTags())
+                .likedBy(new ArrayList<String>())
+                .comments(new ArrayList<Comment>())
+                .build();
+    }
+
+    private void addTags(Blog blog){
+        for(String tagName : blog.getTags()){
+            tagService.addTag(tagName,blog.getId());
+        }
+    }
     public List<Blog> findAllBlogs(){
         return blogRepository.findAll();
     }
@@ -63,26 +66,27 @@ public class BlogService {
     }
 
     public List<Blog> findBlogsByEmail(String email){
-        return blogRepository.findAll().stream().filter(blog -> blog.getAuthor().getEmail().equals(email)).toList();
+        return blogRepository.findAll()
+                .stream()
+                .filter(blog -> blog.getAuthor().getEmail().equals(email))
+                .toList();
     }
 
     public Blog editBlog(Blog blog) {
+        addTags(blog);
         return blogRepository.save(blog);
     }
 
-    public void deleteBlog(String id) {
-        Blog foundBlog = blogRepository.findById(id).orElse(null);
-        if(foundBlog == null)return;
+    public void deleteBlog(String blogId) throws BlogNotFoundException, TagNotFoundException {
+        Blog foundBlog = findById(blogId);
+        deleteBlogIdFromTags(foundBlog);
+        blogRepository.deleteById(blogId);
+    }
 
-        //delete comment head
-        commentService.deleteComment(foundBlog.getNextCommentId());
-
-        //delete from tags
-        for(String tagName : foundBlog.getTags()){
-            tagService.deleteBlogIdFromTag(foundBlog.getId(), tagName);
+    private void deleteBlogIdFromTags(Blog blog) throws TagNotFoundException {
+        for(String tagName : blog.getTags()){
+            tagService.deleteBlogIdFromTag(blog.getId(), tagName);
         }
-        blogRepository.deleteById(id);
-        log.info("Blog deleted, id : {}",id);
     }
 
     public List<Blog> search(String keyword) {
@@ -93,18 +97,21 @@ public class BlogService {
                 .toList();
     }
 
-    public Blog addLike(String userEmail, String blogId) {
-        Blog foundBlog = blogRepository.findById(blogId).orElse(null);
-        if(foundBlog == null)return null;
-        if(foundBlog.getLikedBy().contains(userEmail))return null;
-        foundBlog.getLikedBy().add(userEmail);
+    public Blog addLike(String userEmail, String blogId) throws BlogNotFoundException {
+        Blog foundBlog = findById(blogId);
+        if(!foundBlog.getLikedBy().contains(userEmail)){
+            foundBlog.getLikedBy().add(userEmail);
+            editBlog(foundBlog);
+        }
         return foundBlog;
     }
 
-    public Blog removeLike(String userEmail, String blogId) {
-        Blog foundBlog = blogRepository.findById(blogId).orElse(null);
-        if(foundBlog == null)return null;
-        foundBlog.getLikedBy().remove(userEmail);
+    public Blog removeLike(String userEmail, String blogId) throws BlogNotFoundException {
+        Blog foundBlog = findById(blogId);
+        if(foundBlog.getLikedBy().contains(userEmail)){
+            foundBlog.getLikedBy().remove(userEmail);
+            editBlog(foundBlog);
+        }
         return foundBlog;
     }
 }

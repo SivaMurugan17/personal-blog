@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -13,5 +13,5 @@ import java.util.List;
 public class Tag {
     @Id
     private String name;
-    private List<String> blogs;
+    private Set<String> blogs;
 }

@@ -32,5 +32,6 @@ public class Blog {
 
     private List<String> likedBy;
 
-    private String nextCommentId;
+    @DBRef
+    private List<Comment> comments;
 }

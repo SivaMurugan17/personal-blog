@@ -35,8 +35,6 @@ const NewBlog = () => {
         title : title, 
         content : blogContent, 
         authorEmail : user.email,
-        authorName: user.name,
-        date : new Date(),
         tags: tags
       };
       const response = await axios.post(API_URL_BLOG,blogPost,{

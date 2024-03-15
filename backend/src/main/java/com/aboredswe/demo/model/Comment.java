@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -14,8 +15,7 @@ import java.util.Date;
 @Builder
 @Document
 public class Comment {
-    //follows a linked-list structure with prev value instead of next
-    //head will be stored in the blog as an empty comment
+
     @Id
     private String id;
 
@@ -23,8 +23,8 @@ public class Comment {
     private String text;
 
     @NotNull
-    @Email
-    private String authorEmail;
+    @DBRef
+    private User commentedBy;
+
     private Date date;
-    private String previousCommentId;
 }

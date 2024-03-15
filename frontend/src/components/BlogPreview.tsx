@@ -25,7 +25,7 @@ const BlogPreview = (props : {blog : Blog}) => {
           <Link to={`/blog/${blog.id}`}>
             <div className="flex flex-col gap-1">
               <h3 className='text-2xl'>{blog.title}</h3>
-              <p className="italic">{blog.authorName}</p>
+              <p className="italic">{blog.author.name}</p>
               <p>{new Date(blog.date).toDateString()}</p>
               <div className="flex gap-1">
                 {
