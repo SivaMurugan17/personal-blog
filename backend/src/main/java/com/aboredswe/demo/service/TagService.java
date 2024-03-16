@@ -23,6 +23,7 @@ public class TagService {
     private BlogRepository blogRepository;
 
     public Tag addTag(String name, String blogId) {
+        name = cleanTagName(name);
         try {
             Tag tag = findByName(name);
             tag.getBlogs().add(blogId);
@@ -31,7 +32,7 @@ public class TagService {
             Set<String> blogs = new HashSet<>();
             blogs.add(blogId);
             Tag tag = Tag.builder()
-                    .name(name.toLowerCase())
+                    .name(name)
                     .blogs(blogs)
                     .build();
             return tagRepository.save(tag);
@@ -43,6 +44,7 @@ public class TagService {
     }
 
     public List<Blog> getAllBlogsForTag(String tagName) throws TagNotFoundException, BlogNotFoundException {
+        tagName = cleanTagName(tagName);
         Tag tag = findByName(tagName);
         Set<String> listOfBlogIds = tag.getBlogs();
         List<Blog> result = new ArrayList<>();
@@ -56,6 +58,7 @@ public class TagService {
     }
 
     public void deleteBlogIdFromTag(String blogId,String tagName) throws TagNotFoundException {
+        tagName = cleanTagName(tagName);
         Tag tag = findByName(tagName);
         tag.getBlogs().remove(blogId);
         if (tag.getBlogs().isEmpty()){
@@ -67,10 +70,15 @@ public class TagService {
     }
 
     private Tag findByName(String name) throws TagNotFoundException {
+        name = cleanTagName(name);
         Optional<Tag> foundTag = tagRepository.findById(name);
         if(foundTag.isEmpty()){
             throw new TagNotFoundException();
         }
         return foundTag.get();
+    }
+
+    private String cleanTagName(String tagName) {
+        return tagName.toLowerCase().trim();
     }
 }
