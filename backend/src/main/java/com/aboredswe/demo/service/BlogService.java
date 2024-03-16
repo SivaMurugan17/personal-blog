@@ -9,6 +9,7 @@ import com.aboredswe.demo.model.BlogPostPayload;
 import com.aboredswe.demo.model.Comment;
 import com.aboredswe.demo.model.User;
 import com.aboredswe.demo.repository.BlogRepository;
+import com.aboredswe.demo.repository.CommentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ import java.util.Optional;
 @Service
 public class BlogService {
     @Autowired
-    private TagService tagService;
-
-    @Autowired
     private BlogRepository blogRepository;
-
     @Autowired
     private AuthService authService;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private TagService tagService;
 
     public Blog addBlog(@Valid BlogPostPayload blogPostPayload) throws UserNotFoundException {
         Blog blog = blogRepository.save(buildBlog(blogPostPayload));
@@ -80,7 +81,14 @@ public class BlogService {
     public void deleteBlog(String blogId) throws BlogNotFoundException, TagNotFoundException {
         Blog foundBlog = findById(blogId);
         deleteBlogIdFromTags(foundBlog);
+        deleteCommentsOfThisBlog(foundBlog);
         blogRepository.deleteById(blogId);
+    }
+
+    private void deleteCommentsOfThisBlog(Blog blog) throws BlogNotFoundException {
+        for(Comment comment : blog.getComments()){
+            commentRepository.deleteById(comment.getId());
+        }
     }
 
     private void deleteBlogIdFromTags(Blog blog) throws TagNotFoundException {
