@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { BLACK_TAG, BLACK_BUTTON } from "../../../constants/tailwind-classes";
+import { BLACK_TAG, BLACK_BUTTON, INPUT_BOX_WITH_SLATE_COLOR } from "../../../constants/tailwind-classes";
 
 type UseStatePairs = {
     tags : string[],
@@ -30,7 +30,7 @@ const TagsBar = ({tags, setTags}: UseStatePairs) => {
                     )
                 })
             }
-            <input className='border-2 border-slate-300 outline-none rounded-lg p-1'
+            <input className={`${INPUT_BOX_WITH_SLATE_COLOR}`}
                 onChange={(e) => setTag(e.target.value.trim().toLowerCase())}
                 value={tag} />
             <button className={`${BLACK_BUTTON}`} onClick={handleAddTag}>Add</button>

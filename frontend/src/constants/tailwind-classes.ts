@@ -10,3 +10,4 @@ export const HEADING_H1 = 'text-3xl text-left';
 
 //input
 export const INPUT_BOX_WITH_BOTTOM_LINE = "border-b-2 outline-none";
+export const INPUT_BOX_WITH_SLATE_COLOR = "border-2 border-slate-300 outline-none rounded-lg p-1";
