@@ -3,7 +3,7 @@ import { LoginPayload } from '../../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { API_URL_AUTH } from '../../constants/env-variables';
+import { API_URL_AUTH, API_URL_AUTH_PROVIDER } from '../../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -46,6 +46,16 @@ const Login = () => {
     mutationFn : onSubmit
   })
 
+  const loginWithGithub = ()=>{
+    axios.get(`${API_URL_AUTH_PROVIDER}/github`)
+    .then(res => console.log(res.data));
+  }
+
+  const loginWithGoogle = ()=>{
+    axios.get(`${API_URL_AUTH_PROVIDER}/google`)
+    .then(res => console.log(res.data));
+  }
+
   useEffect(()=>{
     console.log(error)
   },[error])
@@ -80,6 +90,8 @@ const Login = () => {
       
         <p>{error}</p>
       </form>
+      <button onClick={loginWithGoogle}>Login with Google</button>
+      <button onClick={loginWithGithub}>Login with Github</button>
     </div>
   )
 }

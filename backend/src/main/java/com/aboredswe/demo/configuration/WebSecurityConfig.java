@@ -60,10 +60,12 @@ public class WebSecurityConfig {
                                 "/api/blog/**",
                                 "/api/tag/**",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**").permitAll()
+                                "/v3/api-docs/**",
+                                "/oauth2/authorization/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login();
         return http.build();
     }
 

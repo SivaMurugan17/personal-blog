@@ -4,7 +4,7 @@ import { HEADING_H1 } from "../../../constants/tailwind-classes"
 import { Blog } from "../../../constants/types"
 import { API_URL_BLOG } from "../../../constants/env-variables"
 import { useQuery } from "@tanstack/react-query"
-import { ColorRing } from "react-loader-spinner"
+
 
 
 const RecentBlogs = () => {
@@ -25,10 +25,6 @@ const RecentBlogs = () => {
         {
             isError ? <p>{error.message}</p> :
             isPending ? 
-            // <ColorRing
-            //       colors={['#fff','#fff','#fff','#fff','#fff']}
-            //       height={50}
-            //       width={50}/> :
             <p>Loading..</p> :
             <div className='w-10/12 mx-auto flex flex-col gap-2'>
             {
