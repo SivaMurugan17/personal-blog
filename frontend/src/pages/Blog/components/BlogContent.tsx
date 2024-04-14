@@ -1,10 +1,14 @@
-import { Blog } from '../../../constants/types'
 import ReactQuill from 'react-quill'
 import { formats, modules } from '../../../components/QuillToolbar';
 import CommentSection from './CommentSection'
 import Likes from './Likes';
+import { useSelector } from 'react-redux';
+import { State } from '../../../constants/types';
 
-const BlogContent = ({ blog }: { blog: Blog }) => {
+const BlogContent = () => {
+    
+    const blog = useSelector((state : State) => state.blog)
+
     return (
         <div>
             <section className='sticky top-0 bg-white z-10 py-4'>
@@ -21,8 +25,8 @@ const BlogContent = ({ blog }: { blog: Blog }) => {
                 modules={modules}
                 formats={formats}
                 readOnly />
-            <Likes blog={blog} />
-            <CommentSection blog={blog} />
+            <Likes/>
+            <CommentSection/>
         </div>
     )
 }

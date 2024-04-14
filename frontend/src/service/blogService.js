@@ -41,10 +41,10 @@ export const searchBlogs = async (keyword) => {
 
 export const likePost = async (userEmail, blogId) => {
     const { data } = await axios.post(`${API_URL_BLOG}/like?userEmail=${userEmail}&blogId=${blogId}`);
-    console.log(data);
+    return data;
 }
 
 export const unlikePost = async (userEmail, blogId) => {
     const { data } = await axios.delete(`${API_URL_BLOG}/like?userEmail=${userEmail}&blogId=${blogId}`);
-    console.log(data);
+    return data;
 }

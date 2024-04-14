@@ -37,12 +37,7 @@ export type State = {
             password : string
         }
     },
-    blog : {
-        value : {
-
-        },
-        comments : Comment[]
-    }
+    blog : Blog
 }
 
 export type Tag = {

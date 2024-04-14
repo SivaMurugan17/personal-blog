@@ -7,7 +7,7 @@ import Skeleton,{ SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";
 import BlogContent from './components/BlogContent';
 import { fetchBlogById } from '../../service/blogService';
-import { setComments } from '../../slices/currentBlogSlice';
+import { setBlog } from '../../slices/currentBlogSlice';
 
 const Blog = () => {
     const {id} = useParams();
@@ -31,7 +31,7 @@ const Blog = () => {
 
 
     useEffect(()=>{ 
-        if(blog)dispatch(setComments(blog.comments))
+        if(blog)dispatch(setBlog(blog));
     },[blog])
     
   return (
@@ -42,7 +42,7 @@ const Blog = () => {
                 <p><Skeleton count={3} /></p>
             </SkeletonTheme>
             :
-            <BlogContent blog={blog}/>
+            <BlogContent/>
         }
     </div>
   )

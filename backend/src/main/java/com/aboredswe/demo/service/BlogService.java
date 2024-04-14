@@ -105,21 +105,21 @@ public class BlogService {
                 .toList();
     }
 
-    public Blog addLike(String userEmail, String blogId) throws BlogNotFoundException {
+    public List<String> addLike(String userEmail, String blogId) throws BlogNotFoundException {
         Blog foundBlog = findById(blogId);
         if(!foundBlog.getLikedBy().contains(userEmail)){
             foundBlog.getLikedBy().add(userEmail);
             editBlog(foundBlog);
         }
-        return foundBlog;
+        return foundBlog.getLikedBy();
     }
 
-    public Blog removeLike(String userEmail, String blogId) throws BlogNotFoundException {
+    public List<String> removeLike(String userEmail, String blogId) throws BlogNotFoundException {
         Blog foundBlog = findById(blogId);
         if(foundBlog.getLikedBy().contains(userEmail)){
             foundBlog.getLikedBy().remove(userEmail);
             editBlog(foundBlog);
         }
-        return foundBlog;
+        return foundBlog.getLikedBy();
     }
 }

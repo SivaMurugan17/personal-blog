@@ -7,10 +7,11 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { addComment, deleteComment } from '../../../service/commentService';
 import { setComments } from '../../../slices/currentBlogSlice';
 
-const CommentSection = ({ blog }: { blog: Blog }) => {
+const CommentSection = () => {
     const [text, setText] = useState("");
 
     const user = useSelector((state : State) => state.user.value);
+    const blog = useSelector((state : State) => state.blog);
     const comments = useSelector((state : State) => state.blog.comments);
     const dispatch = useDispatch();
 

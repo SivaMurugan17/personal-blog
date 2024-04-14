@@ -88,22 +88,22 @@ public class BlogController {
     }
 
     @PostMapping("/like")
-    public ResponseEntity<Blog> addLike(@RequestParam String userEmail, @RequestParam String blogId ) throws AuthException {
+    public ResponseEntity<List<String>> addLike(@RequestParam String userEmail, @RequestParam String blogId ) throws AuthException {
         try {
-            Blog savedBlog = blogService.addLike(userEmail,blogId);
+            List<String> likedBy = blogService.addLike(userEmail,blogId);
             log.info("Request: POST /blog/like, Like added to blog: {}",blogId);
-            return new ResponseEntity<>(savedBlog,HttpStatus.OK);
+            return new ResponseEntity<>(likedBy,HttpStatus.OK);
         } catch (BlogNotFoundException e) {
             throw new AuthException("Blog not found");
         }
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<Blog> removeLike(@RequestParam String userEmail, @RequestParam String blogId ) throws AuthException {
+    public ResponseEntity<List<String>> removeLike(@RequestParam String userEmail, @RequestParam String blogId ) throws AuthException {
         try {
-            Blog savedBlog = blogService.removeLike(userEmail, blogId);
+            List<String> likedBy = blogService.removeLike(userEmail, blogId);
             log.info("Request: DELETE /blog/like, Like removed from blog: {}",blogId);
-            return new ResponseEntity<>(savedBlog,HttpStatus.OK);
+            return new ResponseEntity<>(likedBy,HttpStatus.OK);
         } catch (BlogNotFoundException e) {
             throw new AuthException("Blog not found");
         }
