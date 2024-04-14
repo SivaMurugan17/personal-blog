@@ -1,6 +1,4 @@
 import { State } from '../../../constants/types';
-import axios from 'axios';
-import { API_URL_BLOG } from '../../../constants/env-variables';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
@@ -10,13 +8,14 @@ import { formats } from '../../../components/QuillToolbar';
 import '.././NewBlog.css';
 import { BLACK_BUTTON } from '../../../constants/tailwind-classes';
 import TagsBar from './TagsBar';
+import { postBlog } from '../../../service/blogService';
 
 const Textpad = () => {
     const [blogContent, setBlogContent] = useState("");
     const [title, setTitle] = useState("");
     const [tags, setTags] = useState<string[]>([]);
 
-    const user = useSelector((state: State) => state.user);
+    const user = useSelector((state: State) => state.user.value);
 
     const navigate = useNavigate();
 
@@ -28,18 +27,14 @@ const Textpad = () => {
                 authorEmail: user.email,
                 tags: tags
             };
-            const response = await axios.post(API_URL_BLOG, blogPost, {
-                withCredentials: true
-            });
-            if (response.data) {
-                //successfully posted
+            postBlog(blogPost)
+            .then(()=>{
                 console.log("Successfully posted");
                 navigate('/your-blogs')
-            }
-            else {
-                //some error occured
-                console.log("Some error occurred");
-            }
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
         }
         catch (e) {
             console.log(e);

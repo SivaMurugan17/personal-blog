@@ -2,14 +2,14 @@ import { useForm } from 'react-hook-form';
 import { SignupPayload } from '../../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import { API_URL_AUTH } from '../../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { ColorRing } from 'react-loader-spinner';
 import { INPUT_BOX_WITH_BOTTOM_LINE } from '../../constants/tailwind-classes';
+import { setUser } from '../../slices/userSlice';
+import { registerUser } from '../../service/userService';
 
 
 const Signup = () => {
@@ -31,20 +31,15 @@ const Signup = () => {
   });
 
   const onSubmit = async(signupPayload : SignupPayload)=>{
-    const { data } = await axios.post(API_URL_AUTH+"/register",signupPayload,{
-      withCredentials : true
-    });
-    console.log(data)
-    if(data != null){
-      //successful signup
+    registerUser(signupPayload)
+    .then(( data )=>{
       navigate("/");
-      dispatch({type : 'SET',payload : data});
-    }
-    else{
-      //unsuccessful signup
+      dispatch(setUser(data));
+      return data;
+    })
+    .catch(()=>{
       setError("Sign up failed")
-    }
-    return data;
+    })
   }
 
   const mutation = useMutation({

@@ -1,24 +1,17 @@
-import axios from "axios"
 import BlogPreview from "../../../components/BlogPreview"
 import { HEADING_H1 } from "../../../constants/tailwind-classes"
 import { Blog } from "../../../constants/types"
-import { API_URL_BLOG } from "../../../constants/env-variables"
 import { useQuery } from "@tanstack/react-query"
-
+import { fetchBlogs } from "../../../service/blogService"
 
 
 const RecentBlogs = () => {
-    const fetchBlogs = async ()=>{
-        const { data } = await axios.get(API_URL_BLOG,{
-          withCredentials : true
-        });
-        return data;
-    }
-  
+
     const {data : blogs, isPending, isError, error} = useQuery({
       queryKey : ['blogs'],
       queryFn : fetchBlogs
     })
+
   return (
     <section className='flex flex-col gap-4 w-10/12 mx-auto'>
         <h1 className={`${HEADING_H1}`}>Recent Blogs</h1>

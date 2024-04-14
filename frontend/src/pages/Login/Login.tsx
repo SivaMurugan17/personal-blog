@@ -2,14 +2,14 @@ import { useForm } from 'react-hook-form'
 import { LoginPayload } from '../../constants/types';
 import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import { API_URL_AUTH, API_URL_AUTH_PROVIDER } from '../../constants/env-variables';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { ColorRing } from 'react-loader-spinner';
 import { INPUT_BOX_WITH_BOTTOM_LINE } from '../../constants/tailwind-classes';
+import { setUser } from '../../slices/userSlice';
+import { loginUser, loginWithGithub } from '../../service/userService';
 
 const Login = () => {
 
@@ -29,36 +29,22 @@ const Login = () => {
   });
 
   const onSubmit = async (loginPayload : LoginPayload)=>{
-    const { data } = await axios.post(API_URL_AUTH+"/login",loginPayload,{
-      withCredentials : true
-    });
-    if(data != null){
-      navigate("/")
-      dispatch({type : 'SET', payload : data});
-    }
-    else{
-      setError(data);
-    }
-    return data;
+    loginUser(loginPayload)
+    .then((data)=>{
+      if(data != null){
+        navigate("/")
+        dispatch(setUser(data));
+      }
+      else{
+        setError(data);
+      }
+      return data;
+    })
   }
 
   const mutation = useMutation({
     mutationFn : onSubmit
   })
-
-  const loginWithGithub = ()=>{
-    axios.get(`${API_URL_AUTH_PROVIDER}/github`)
-    .then(res => console.log(res.data));
-  }
-
-  const loginWithGoogle = ()=>{
-    axios.get(`${API_URL_AUTH_PROVIDER}/google`)
-    .then(res => console.log(res.data));
-  }
-
-  useEffect(()=>{
-    console.log(error)
-  },[error])
 
   return (
     <div className='text-xl px-8'>
@@ -90,7 +76,7 @@ const Login = () => {
       
         <p>{error}</p>
       </form>
-      <button onClick={loginWithGoogle}>Login with Google</button>
+      <button onClick={loginWithGithub}>Login with Google</button>
       <button onClick={loginWithGithub}>Login with Github</button>
     </div>
   )

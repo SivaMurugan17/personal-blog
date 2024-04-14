@@ -1,26 +1,21 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react'
-import { API_URL_BLOG } from '../../constants/env-variables';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { State, Blog } from '../../constants/types';
 import BlogPreview from '../../components/BlogPreview';
+import { fetchBlogsByUserEmail } from '../../service/blogService';
 
 const YourBlogs = () => {
 
-    const user = useSelector((state : State) => state.user);
+    const user = useSelector((state : State) => state.user.value);
 
     const [blogs,setBlogs] = useState([]);
 
     const fetchYourBlogs = async()=>{
-        try{
-            const response = await axios.get(`${API_URL_BLOG}/author?email=${user.email}`,{
-                withCredentials : true
+        fetchBlogsByUserEmail(user.email)
+            .then((res)=>{
+                console.log(res)
+                setBlogs(res);
             })
-            setBlogs(response.data);
-        }
-        catch(e){
-            console.log(e);
-        }
     }
 
     useEffect(()=>{

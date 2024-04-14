@@ -31,9 +31,11 @@ export type Blog = {
 
 export type State = {
     user : {
-        name : string,
-        email : string,
-        password : string
+        value : {
+            name : string,
+            email : string,
+            password : string
+        }
     }
 }
 

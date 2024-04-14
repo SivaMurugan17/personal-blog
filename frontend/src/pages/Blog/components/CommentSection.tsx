@@ -1,33 +1,15 @@
 import { useState } from 'react';
 import { Blog, Comment, State } from '../../../constants/types';
 import { BLACK_BUTTON, INPUT_BOX_WITH_SLATE_COLOR } from '../../../constants/tailwind-classes';
-import axios from 'axios';
-import { API_URL_COMMENT } from '../../../constants/env-variables';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { addComment, deleteComment } from '../../../service/commentService';
 
 const CommentSection = ({ blog }: { blog: Blog }) => {
     const [text, setText] = useState("");
 
-    const user = useSelector((state: State) => state.user);
-
-    const addComment = async () => {
-        const { data } = await axios.post(`${API_URL_COMMENT}/${blog.id}`, {
-            text,
-            commentedBy: user.email
-        }, {
-            withCredentials: true
-        })
-        console.log(data);
-    }
-
-    const deleteComment = async (id: string) => {
-        const { data } = await axios.delete(`${API_URL_COMMENT}?blogId=${blog.id}&commentId=${id}`, {
-            withCredentials: true
-        })
-        console.log(data);
-    }
+    const user = useSelector((state: State) => state.user.value);
 
     return (
         <div>
@@ -35,7 +17,7 @@ const CommentSection = ({ blog }: { blog: Blog }) => {
             <section className='flex'>
                 <input onChange={(e) => setText(e.target.value)}
                     className={`${INPUT_BOX_WITH_SLATE_COLOR} basis-3/4`} />
-                <button className={`${BLACK_BUTTON} basis-1/4`} onClick={addComment}>Comment</button>
+                <button className={`${BLACK_BUTTON} basis-1/4`} onClick={()=> addComment(blog.id,text,user.email)}>Comment</button>
             </section>
             {
                 blog.comments.map((comment: Comment) => {
@@ -47,7 +29,7 @@ const CommentSection = ({ blog }: { blog: Blog }) => {
                             </article>
                             <article className='flex justify-between'>
                                 <p className='text-2xl'>{comment.text}</p>
-                                <button onClick={() => deleteComment(comment.id)}
+                                <button onClick={() => deleteComment(blog.id, comment.id)}
                                     className='text-red-600'><FontAwesomeIcon icon={faTrash} /></button>
                             </article>
                         </div>

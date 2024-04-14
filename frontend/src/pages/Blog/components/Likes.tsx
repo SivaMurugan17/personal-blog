@@ -1,27 +1,16 @@
 import { Blog, State } from "../../../constants/types"
-import axios from "axios";
-import { API_URL_BLOG } from "../../../constants/env-variables";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as redHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as whiteHeart } from '@fortawesome/free-regular-svg-icons';
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { likePost, unlikePost } from "../../../service/blogService";
 
 
 const Likes = ({ blog }: { blog: Blog }) => {
     const [isCurrentUserLiked, setIsCurrentUserLiked] = useState(false);
 
-    const user = useSelector((state: State) => state.user);
-
-    const likePost = async () => {
-        const { data } = await axios.post(`${API_URL_BLOG}/like?userEmail=${user.email}&blogId=${blog.id}`);
-        console.log(data);
-    }
-
-    const unlikePost = async () => {
-        const { data } = await axios.delete(`${API_URL_BLOG}/like?userEmail=${user.email}&blogId=${blog.id}`);
-        console.log(data);
-    }
+    const user = useSelector((state: State) => state.user.value);
 
     const checkUserLiked = () => {
         let flag = false;
@@ -43,13 +32,13 @@ const Likes = ({ blog }: { blog: Blog }) => {
             {
                 isCurrentUserLiked ?
                     <button
-                        onClick={unlikePost}
+                        onClick={()=>unlikePost(user.email,blog.id)}
                         className='text-red-600'>
                         <FontAwesomeIcon icon={redHeart} />
                     </button>
                     :
                     <button
-                        onClick={likePost}>
+                        onClick={()=>likePost(user.email,blog.id)}>
                         <FontAwesomeIcon icon={whiteHeart} />
                     </button>
             }

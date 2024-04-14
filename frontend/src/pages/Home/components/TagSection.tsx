@@ -1,16 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { BLACK_TAG, HEADING_H1 } from '../../../constants/tailwind-classes'
-import axios from 'axios'
-import { API_URL_TAG } from '../../../constants/env-variables'
 import { Tag } from '../../../constants/types'
+import { loadTags } from '../../../service/tagService'
 
 const TagSection = () => {
-    const loadTags = async()=>{
-        const { data} = await axios.get(`${API_URL_TAG}`,{
-            withCredentials : true
-        })
-        return data;
-    }
+    
     const { data : tags, isLoading} = useQuery({
         queryKey : ['tags'],
         queryFn : loadTags

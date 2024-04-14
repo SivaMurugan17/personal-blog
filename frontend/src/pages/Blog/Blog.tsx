@@ -1,32 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios';
-import { API_URL_BLOG } from '../../constants/env-variables';
 import { useSelector } from 'react-redux';
 import { State } from '../../constants/types';
 import { useQuery } from '@tanstack/react-query';
 import Skeleton,{ SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";
 import BlogContent from './components/BlogContent';
+import { fetchBlogById } from '../../service/blogService';
 
 const Blog = () => {
     const {id} = useParams();
 
-    const user = useSelector((state : State) => state.user);
+    const user = useSelector((state : State) => state.user.value);
     
     const [ allowEdit,setAllowEdit ] = useState(false);
     
-
-    const fetchBlog = async()=>{
-        const { data } = await axios.get(`${API_URL_BLOG}/${id}`,{
-            withCredentials : true
-        });
-        return data;
-    }
-
     const {data : blog, isLoading, isError} = useQuery({
-        queryKey : ['blog'],
-        queryFn : fetchBlog
+        queryKey : ['blog',id],
+        queryFn : () => fetchBlogById(id)
     })
 
     useEffect(()=>{

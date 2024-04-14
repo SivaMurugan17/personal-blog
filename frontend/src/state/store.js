@@ -1,16 +1,10 @@
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from '../slices/userSlice';
+import blogReducer from '../slices/currentBlogSlice'
 
-const initialState = { user : null};
-
-export const userReducer = (state = initialState,action)=>{
-    switch(action.type){
-        case 'SET':
-            return { user : action.payload };
-        case 'CLEAR':
-            return initialState;
-        default:
-            return state;
+export const store = configureStore({
+    reducer : {
+        user : userReducer,
+        blog : blogReducer
     }
-}
-
-export const store = createStore(userReducer);
+})
