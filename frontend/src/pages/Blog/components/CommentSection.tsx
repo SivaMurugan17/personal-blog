@@ -1,15 +1,28 @@
 import { useState } from 'react';
 import { Blog, Comment, State } from '../../../constants/types';
 import { BLACK_BUTTON, INPUT_BOX_WITH_SLATE_COLOR } from '../../../constants/tailwind-classes';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { addComment, deleteComment } from '../../../service/commentService';
+import { setComments } from '../../../slices/currentBlogSlice';
 
 const CommentSection = ({ blog }: { blog: Blog }) => {
     const [text, setText] = useState("");
 
-    const user = useSelector((state: State) => state.user.value);
+    const user = useSelector((state : State) => state.user.value);
+    const comments = useSelector((state : State) => state.blog.comments);
+    const dispatch = useDispatch();
+
+    const addThisComment = (blogId : string, text : string, userEmail : string)=>{
+        addComment(blogId,text,userEmail)
+            .then( comments => dispatch(setComments(comments)));
+    }
+
+    const deleteThisComment = (blogId : string,commentId : string)=>{
+        deleteComment(blogId, commentId)
+            .then( comments => dispatch(setComments(comments)));
+    }
 
     return (
         <div>
@@ -17,10 +30,10 @@ const CommentSection = ({ blog }: { blog: Blog }) => {
             <section className='flex'>
                 <input onChange={(e) => setText(e.target.value)}
                     className={`${INPUT_BOX_WITH_SLATE_COLOR} basis-3/4`} />
-                <button className={`${BLACK_BUTTON} basis-1/4`} onClick={()=> addComment(blog.id,text,user.email)}>Comment</button>
+                <button className={`${BLACK_BUTTON} basis-1/4`} onClick={()=> addThisComment(blog.id,text,user.email)}>Comment</button>
             </section>
             {
-                blog.comments.map((comment: Comment) => {
+                comments.map((comment: Comment) => {
                     return (
                         <div className='text-left border rounded p-2 my-2'>
                             <article>
@@ -29,7 +42,7 @@ const CommentSection = ({ blog }: { blog: Blog }) => {
                             </article>
                             <article className='flex justify-between'>
                                 <p className='text-2xl'>{comment.text}</p>
-                                <button onClick={() => deleteComment(blog.id, comment.id)}
+                                <button onClick={() => deleteThisComment(blog.id, comment.id)}
                                     className='text-red-600'><FontAwesomeIcon icon={faTrash} /></button>
                             </article>
                         </div>

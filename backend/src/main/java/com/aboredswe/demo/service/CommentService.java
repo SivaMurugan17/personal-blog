@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -23,10 +24,9 @@ public class CommentService {
     @Autowired
     CommentRepository commentRepository;
 
-    public Comment addComment(CommentPostPayload commentPostPayload, String blogId) throws BlogNotFoundException, UserNotFoundException {
+    public List<Comment> addComment(CommentPostPayload commentPostPayload, String blogId) throws BlogNotFoundException, UserNotFoundException {
         Comment savedComment = commentRepository.save(buildComment(commentPostPayload));
-        addCommentToBlog(savedComment,blogId);
-        return savedComment;
+        return addCommentToBlog(savedComment,blogId);
     }
 
     private Comment buildComment(CommentPostPayload commentPostPayload) throws UserNotFoundException {
@@ -38,18 +38,20 @@ public class CommentService {
                 .build();
     }
 
-    private void addCommentToBlog(Comment comment,String blogId) throws BlogNotFoundException {
+    private List<Comment> addCommentToBlog(Comment comment, String blogId) throws BlogNotFoundException {
         Blog foundBlog = blogService.findById(blogId);
         foundBlog.getComments().add(comment);
         blogService.editBlog(foundBlog);
+        return foundBlog.getComments();
     }
 
-    public void deleteComment(String blogId, String commentId) throws BlogNotFoundException {
-        removeCommentFromBlog(blogId,commentId);
+    public List<Comment> deleteComment(String blogId, String commentId) throws BlogNotFoundException {
+        List<Comment> currentComments = removeCommentFromBlog(blogId,commentId);
         commentRepository.deleteById(commentId);
+        return currentComments;
     }
 
-    private void removeCommentFromBlog(String blogId, String commentId) throws BlogNotFoundException {
+    private List<Comment> removeCommentFromBlog(String blogId, String commentId) throws BlogNotFoundException {
         Blog foundBlog = blogService.findById(blogId);
         foundBlog.setComments(foundBlog
                 .getComments()
@@ -57,5 +59,6 @@ public class CommentService {
                 .filter(comment -> !comment.getId().equals(commentId))
                 .toList());
         blogService.editBlog(foundBlog);
+        return foundBlog.getComments();
     }
 }

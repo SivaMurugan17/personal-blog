@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/comment")
@@ -20,14 +22,14 @@ public class CommentController {
     CommentService commentService;
 
     @PostMapping("/{blogId}")
-    public ResponseEntity<Comment> addComment(@RequestBody CommentPostPayload commentPostPayload,
-                                              @PathVariable String blogId) throws AuthException {
+    public ResponseEntity<List<Comment>> addComment(@RequestBody CommentPostPayload commentPostPayload,
+                                                    @PathVariable String blogId) throws AuthException {
         try {
-            Comment savedComment = commentService.addComment(commentPostPayload, blogId);
-            log.info("Request: POST /comment/blogId, Comment added: {}",savedComment);
+            List<Comment> currentComments = commentService.addComment(commentPostPayload, blogId);
+            log.info("Request: POST /comment/blogId, Comment added");
             return ResponseEntity
                     .ok()
-                    .body(savedComment);
+                    .body(currentComments);
         } catch (BlogNotFoundException e) {
             throw new AuthException("Blog not found");
         } catch (UserNotFoundException e) {
@@ -37,13 +39,13 @@ public class CommentController {
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteComment(@RequestParam String blogId, @RequestParam String commentId) throws AuthException {
+    public ResponseEntity<List<Comment>> deleteComment(@RequestParam String blogId, @RequestParam String commentId) throws AuthException {
         try {
-            commentService.deleteComment(blogId, commentId);
+            List<Comment> currentComments = commentService.deleteComment(blogId, commentId);
             log.info("Request: DELETE /comment?blogId, Deleted comment: {}",blogId);
             return ResponseEntity
                     .ok()
-                    .body("Comment deleted");
+                    .body(currentComments);
         } catch (BlogNotFoundException e) {
             throw new AuthException("Blog not found");
         }

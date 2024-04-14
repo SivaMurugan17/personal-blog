@@ -4,15 +4,19 @@ import { createSlice } from "@reduxjs/toolkit";
 const currentBlogSlice = createSlice({
     name : 'blog',
     initialState : {
-        value : null
+        value : null,
+        comments : []
     },
     reducers : {
-        setBlog : ( state, action ) =>{
+        setBlog : ( state, action )=>{
             state.value = action.payload;
+        },
+        setComments : ( state,action )=>{
+            state.comments = action.payload;
         }
     }
 })
 
-export const { setBlog } = currentBlogSlice.actions;
+export const { setBlog, setComments } = currentBlogSlice.actions;
 
 export default currentBlogSlice.reducer;

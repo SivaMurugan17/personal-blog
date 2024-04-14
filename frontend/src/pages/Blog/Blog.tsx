@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../constants/types';
 import { useQuery } from '@tanstack/react-query';
 import Skeleton,{ SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";
 import BlogContent from './components/BlogContent';
 import { fetchBlogById } from '../../service/blogService';
+import { setComments } from '../../slices/currentBlogSlice';
 
 const Blog = () => {
     const {id} = useParams();
 
     const user = useSelector((state : State) => state.user.value);
+    const dispatch = useDispatch();
     
     const [ allowEdit,setAllowEdit ] = useState(false);
     
@@ -26,6 +28,11 @@ const Blog = () => {
             setAllowEdit(true);
        }
     },[user,blog,isLoading])
+
+
+    useEffect(()=>{ 
+        if(blog)dispatch(setComments(blog.comments))
+    },[blog])
     
   return (
     <div className='flex flex-col gap-4 w-10/12 mx-auto p-4 max-w-2xl'>

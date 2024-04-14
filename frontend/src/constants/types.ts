@@ -36,6 +36,12 @@ export type State = {
             email : string,
             password : string
         }
+    },
+    blog : {
+        value : {
+
+        },
+        comments : Comment[]
     }
 }
 

@@ -8,12 +8,12 @@ export const addComment = async (blogId, text, userEmail) => {
     }, {
         withCredentials: true
     })
-    console.log(data);
+    return data;
 }
 
 export const deleteComment = async (blogId, commentId) => {
     const { data } = await axios.delete(`${API_URL_COMMENT}?blogId=${blogId}&commentId=${commentId}`, {
         withCredentials: true
     })
-    console.log(data);
+    return data;
 }
