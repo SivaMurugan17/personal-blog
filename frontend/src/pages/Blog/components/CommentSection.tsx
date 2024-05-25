@@ -17,7 +17,8 @@ const CommentSection = () => {
 
     const addThisComment = (blogId : string, text : string, userEmail : string)=>{
         addComment(blogId,text,userEmail)
-            .then( comments => dispatch(setComments(comments)));
+            .then( comments => dispatch(setComments(comments)))
+            .then(()=>setText(""));
     }
 
     const deleteThisComment = (blogId : string,commentId : string)=>{
@@ -29,12 +30,19 @@ const CommentSection = () => {
         <div>
             <h2 className='text-left text-xl'>Add a comment</h2>
             <section className='flex'>
-                <input onChange={(e) => setText(e.target.value)}
-                    className={`${INPUT_BOX_WITH_SLATE_COLOR} basis-3/4`} />
-                <button className={`${BLACK_BUTTON} basis-1/4`} onClick={()=> addThisComment(blog.id,text,user.email)}>Comment</button>
+                <input 
+                    className={`${INPUT_BOX_WITH_SLATE_COLOR} basis-3/4`}
+                    onChange={(e) => setText(e.target.value)}
+                    value={text} 
+                />
+                <button 
+                    className={`${BLACK_BUTTON} basis-1/4`} 
+                    onClick={()=> addThisComment(blog.id,text,user.email)}>
+                    Comment
+                </button>
             </section>
             {
-                comments.map((comment: Comment, index : number) => {
+                comments.toReversed().map((comment: Comment, index : number) => {
                     return (
                         <div className='text-left border rounded p-2 my-2' key={index}>
                             <article>
