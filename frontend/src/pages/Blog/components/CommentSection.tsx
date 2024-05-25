@@ -34,9 +34,9 @@ const CommentSection = () => {
                 <button className={`${BLACK_BUTTON} basis-1/4`} onClick={()=> addThisComment(blog.id,text,user.email)}>Comment</button>
             </section>
             {
-                comments.map((comment: Comment) => {
+                comments.map((comment: Comment, index : number) => {
                     return (
-                        <div className='text-left border rounded p-2 my-2'>
+                        <div className='text-left border rounded p-2 my-2' key={index}>
                             <article>
                                 <span className='mr-2'>{comment.commentedBy.name}</span>
                                 <span className='text-sm'>{new Date(comment.date).toDateString()}</span>

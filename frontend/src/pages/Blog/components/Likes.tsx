@@ -25,7 +25,7 @@ const Likes = () => {
     }
 
     useEffect(() => {
-        setIsCurrentUserLiked(blog.likedBy.includes(user.email));
+        setIsCurrentUserLiked(blog.likedBy.includes(user?.email));
     }, [blog, user])
 
     return (
