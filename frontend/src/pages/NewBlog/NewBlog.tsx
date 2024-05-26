@@ -1,5 +1,5 @@
 import QuillToolbar from '../../components/QuillToolbar';
-import Textpad from './components/Textpad';
+import Textpad from '../../components/Textpad';
 
 const NewBlog = () => {
   return (

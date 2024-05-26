@@ -1,13 +1,6 @@
 import axios from "axios";
 import { API_URL_BLOG } from "../constants/env-variables";
 
-export const postBlog = async(blogPost)=>{
-    const { data } = await axios.post(API_URL_BLOG, blogPost, {
-        withCredentials: true
-    });
-    return data;
-}
-
 export const fetchBlogs = async()=>{
     const { data } = await axios.get(API_URL_BLOG,{
       withCredentials : true
@@ -35,6 +28,20 @@ export const searchBlogs = async (keyword) => {
     }
     const { data } = await axios.get(`${API_URL_BLOG}/search?title=${keyword}`,{
         withCredentials : true
+    });
+    return data;
+}
+
+export const postBlog = async(blogPost)=>{
+    const { data } = await axios.post(API_URL_BLOG, blogPost, {
+        withCredentials: true
+    });
+    return data;
+}
+
+export const putBlog = async(blogPost,blogId)=>{
+    const { data } = await axios.put(`${API_URL_BLOG}/${blogId}`, blogPost, {
+        withCredentials: true
     });
     return data;
 }

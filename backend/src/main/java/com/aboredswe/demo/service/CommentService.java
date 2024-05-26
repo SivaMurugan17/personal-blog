@@ -39,7 +39,7 @@ public class CommentService {
     }
 
     private List<Comment> addCommentToBlog(Comment comment, String blogId) throws BlogNotFoundException {
-        Blog foundBlog = blogService.findById(blogId);
+        Blog foundBlog = blogService.findBlogById(blogId);
         foundBlog.getComments().add(comment);
         blogService.editBlog(foundBlog);
         return foundBlog.getComments();
@@ -52,7 +52,7 @@ public class CommentService {
     }
 
     private List<Comment> removeCommentFromBlog(String blogId, String commentId) throws BlogNotFoundException {
-        Blog foundBlog = blogService.findById(blogId);
+        Blog foundBlog = blogService.findBlogById(blogId);
         foundBlog.setComments(foundBlog
                 .getComments()
                 .stream()

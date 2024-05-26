@@ -25,13 +25,28 @@ public class BlogController {
     private BlogService blogService;
 
     @PostMapping
-    public ResponseEntity<Blog> addBlog(@Valid @RequestBody BlogPostPayload blog) throws AuthException {
+    public ResponseEntity<Blog> addBlog(@Valid @RequestBody BlogPostPayload blog)
+                                                                throws AuthException {
         try {
             Blog savedBlog = blogService.addBlog(blog);
             log.info("Request: POST /blog, Blog added: {}",savedBlog);
             return new ResponseEntity<>(savedBlog,HttpStatus.CREATED);
         } catch (UserNotFoundException e) {
             throw new AuthException("Invalid author");
+        }
+    }
+
+    @PutMapping("/{blogId}")
+    public ResponseEntity<Blog> editBlog(@RequestBody BlogPostPayload blogPostPayload,
+                                         @PathVariable String blogId)
+                                                        throws AuthException {
+        try{
+            Blog editedBlog = blogService.modifyBlog(blogPostPayload,blogId);
+            log.info("Request: PUT /blog, Blog edited: {}",editedBlog);
+            return ResponseEntity.ok().body(editedBlog);
+        }
+        catch (UserNotFoundException e){
+            throw new AuthException(("Invalid author"));
         }
     }
 
@@ -45,7 +60,7 @@ public class BlogController {
     @GetMapping("/{id}")
     public ResponseEntity<Blog> findBlogById(@PathVariable String id){
         try {
-            Blog foundBlog = blogService.findById(id);
+            Blog foundBlog = blogService.findBlogById(id);
             log.info("Request: GET /blog/id, Found blog: {}",foundBlog);
             return new ResponseEntity<>(foundBlog,HttpStatus.OK);
         } catch (BlogNotFoundException e) {
@@ -58,13 +73,6 @@ public class BlogController {
         List<Blog> blogsByUser = blogService.findBlogsByEmail(email);
         log.info("Request: GET /blog/author?email, Found blogs for user: {}",blogsByUser.size());
         return new ResponseEntity<>(blogsByUser,HttpStatus.OK);
-    }
-
-    @PutMapping
-    public ResponseEntity<Blog> editBlog(@Valid @RequestBody Blog blog){
-        Blog editedBlog = blogService.editBlog(blog);
-        log.info("Request: PUT /blog, Edited blog: {}",editedBlog);
-        return new ResponseEntity<>(editedBlog,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -82,7 +90,7 @@ public class BlogController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Blog>> search(@RequestParam String title){
-        List<Blog> result = blogService.search(title);
+        List<Blog> result = blogService.searchBlogs(title);
         log.info("Request: GET /blog/search, Found blogs: {}",result.size());
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

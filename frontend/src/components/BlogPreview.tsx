@@ -3,16 +3,17 @@ import { Blog } from "../constants/types";
 import { BLACK_TAG, ICON_ONLY_BUTTON } from "../constants/tailwind-classes";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL_BLOG } from "../constants/env-variables";
 
 
 const BlogPreview = (props : {blog : Blog}) => {
   const {blog} = props;
+  const navigate = useNavigate();
 
   const handleEdit = (id : string)=>{
-    console.log("Edited")
+    navigate(`/edit-blog/${id}`)
   }
 
   const handleDelete = async(id : string)=>{

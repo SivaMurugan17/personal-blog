@@ -30,10 +30,73 @@ public class BlogService {
     @Autowired
     private TagService tagService;
 
+    public Blog findBlogById(String id) throws BlogNotFoundException {
+        Optional<Blog> foundBlog = blogRepository.findById(id);
+        if(foundBlog.isEmpty()){
+            throw new BlogNotFoundException();
+        }
+        return foundBlog.get();
+    }
+
+    public List<Blog> findAllBlogs(){
+        return blogRepository.findAll();
+    }
+
+    public List<Blog> findBlogsByEmail(String email){
+        return blogRepository.findAll()
+                .stream()
+                .filter(blog -> blog.getAuthor().getEmail().equals(email))
+                .toList();
+    }
+
+    public List<Blog> searchBlogs(String keyword) {
+        List<Blog> allBlogs = blogRepository.findAll();
+        return allBlogs
+                .stream().
+                filter(blog -> blog.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
+                .toList();
+    }
+
     public Blog addBlog(@Valid BlogPostPayload blogPostPayload) throws UserNotFoundException {
         Blog blog = blogRepository.save(buildBlog(blogPostPayload));
         addTags(blog);
         return blog;
+    }
+
+    public Blog modifyBlog(BlogPostPayload blogPostPayload,String blogId) throws UserNotFoundException {
+        Blog blog = buildBlog(blogPostPayload);
+        blog.setId(blogId);
+        return editBlog(blog);
+    }
+
+    public void deleteBlog(String blogId) throws BlogNotFoundException, TagNotFoundException {
+        Blog foundBlog = findBlogById(blogId);
+        deleteBlogIdFromTags(foundBlog);
+        deleteCommentsOfThisBlog(foundBlog);
+        blogRepository.deleteById(blogId);
+    }
+
+    public List<String> addLike(String userEmail, String blogId) throws BlogNotFoundException {
+        Blog foundBlog = findBlogById(blogId);
+        if(!foundBlog.getLikedBy().contains(userEmail)){
+            foundBlog.getLikedBy().add(userEmail);
+            editBlog(foundBlog);
+        }
+        return foundBlog.getLikedBy();
+    }
+
+    public List<String> removeLike(String userEmail, String blogId) throws BlogNotFoundException {
+        Blog foundBlog = findBlogById(blogId);
+        if(foundBlog.getLikedBy().contains(userEmail)){
+            foundBlog.getLikedBy().remove(userEmail);
+            editBlog(foundBlog);
+        }
+        return foundBlog.getLikedBy();
+    }
+
+    public Blog editBlog(Blog blog) {
+        addTags(blog);
+        return blogRepository.save(blog);
     }
 
     private Blog buildBlog(BlogPostPayload blogPostPayload) throws UserNotFoundException {
@@ -54,36 +117,6 @@ public class BlogService {
             tagService.addTag(tagName,blog.getId());
         }
     }
-    public List<Blog> findAllBlogs(){
-        return blogRepository.findAll();
-    }
-
-    public Blog findById(String id) throws BlogNotFoundException {
-        Optional<Blog> foundBlog = blogRepository.findById(id);
-        if(foundBlog.isEmpty()){
-            throw new BlogNotFoundException();
-        }
-        return foundBlog.get();
-    }
-
-    public List<Blog> findBlogsByEmail(String email){
-        return blogRepository.findAll()
-                .stream()
-                .filter(blog -> blog.getAuthor().getEmail().equals(email))
-                .toList();
-    }
-
-    public Blog editBlog(Blog blog) {
-        addTags(blog);
-        return blogRepository.save(blog);
-    }
-
-    public void deleteBlog(String blogId) throws BlogNotFoundException, TagNotFoundException {
-        Blog foundBlog = findById(blogId);
-        deleteBlogIdFromTags(foundBlog);
-        deleteCommentsOfThisBlog(foundBlog);
-        blogRepository.deleteById(blogId);
-    }
 
     private void deleteCommentsOfThisBlog(Blog blog) throws BlogNotFoundException {
         for(Comment comment : blog.getComments()){
@@ -95,31 +128,5 @@ public class BlogService {
         for(String tagName : blog.getTags()){
             tagService.deleteBlogIdFromTag(blog.getId(), tagName);
         }
-    }
-
-    public List<Blog> search(String keyword) {
-        List<Blog> allBlogs = blogRepository.findAll();
-        return allBlogs
-                .stream().
-                filter(blog -> blog.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
-                .toList();
-    }
-
-    public List<String> addLike(String userEmail, String blogId) throws BlogNotFoundException {
-        Blog foundBlog = findById(blogId);
-        if(!foundBlog.getLikedBy().contains(userEmail)){
-            foundBlog.getLikedBy().add(userEmail);
-            editBlog(foundBlog);
-        }
-        return foundBlog.getLikedBy();
-    }
-
-    public List<String> removeLike(String userEmail, String blogId) throws BlogNotFoundException {
-        Blog foundBlog = findById(blogId);
-        if(foundBlog.getLikedBy().contains(userEmail)){
-            foundBlog.getLikedBy().remove(userEmail);
-            editBlog(foundBlog);
-        }
-        return foundBlog.getLikedBy();
     }
 }

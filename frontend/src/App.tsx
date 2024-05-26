@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import Blog from './pages/Blog/Blog';
 import { clearUser, setUser } from './slices/userSlice';
 import { refreshUser } from './service/userService';
+import EditBlog from './pages/EditBlog/EditBog';
  
 function App() {
   const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ function App() {
             <Route path='/signup' element={<Signup/>}/>
             <Route path='/new-blog' element={<NewBlog/>}/>
             <Route path='/blog/:id' element={<Blog/>}/>
+            <Route path='/edit-blog/:id' element={<EditBlog/>}/>
             <Route path='/your-blogs' element={<YourBlogs/>}/>
           </Routes>
         </BrowserRouter>
