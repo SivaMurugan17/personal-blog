@@ -1,16 +1,19 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Blog } from "../constants/types";
+import { Blog, State } from "../constants/types";
 import { BLACK_TAG, ICON_ONLY_BUTTON } from "../constants/tailwind-classes";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL_BLOG } from "../constants/env-variables";
+import { useSelector } from "react-redux";
 
 
 const BlogPreview = (props : {blog : Blog}) => {
+  
   const {blog} = props;
   const navigate = useNavigate();
+  const user = useSelector((state: State) => state.user.value);
 
   const handleEdit = (id : string)=>{
     navigate(`/edit-blog/${id}`)
@@ -38,8 +41,22 @@ const BlogPreview = (props : {blog : Blog}) => {
             </div>
           </Link>
           <div> 
-            <button className={`${ICON_ONLY_BUTTON} text-blue-600`} onClick={()=>handleEdit(blog.id)}><FontAwesomeIcon icon={faPenToSquare}/></button>
-            <button className={`${ICON_ONLY_BUTTON} text-red-600`} onClick={()=>handleDelete(blog.id)}><FontAwesomeIcon icon={faTrash}/></button>
+            {
+              blog.author.email === user?.email && 
+              <button 
+                className={`${ICON_ONLY_BUTTON} text-blue-600`} 
+                onClick={()=>handleEdit(blog.id)}>
+                  <FontAwesomeIcon icon={faPenToSquare}/>
+              </button>
+            }
+            {
+              blog.author.email === user?.email &&
+              <button 
+                className={`${ICON_ONLY_BUTTON} text-red-600`} 
+                onClick={()=>handleDelete(blog.id)}>
+                  <FontAwesomeIcon icon={faTrash}/>
+              </button>
+            }
           </div>
     </div>
   )

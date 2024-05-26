@@ -28,19 +28,31 @@ const CommentSection = () => {
 
     return (
         <div>
-            <h2 className='text-left text-xl'>Add a comment</h2>
-            <section className='flex'>
-                <input 
-                    className={`${INPUT_BOX_WITH_SLATE_COLOR} basis-3/4`}
-                    onChange={(e) => setText(e.target.value)}
-                    value={text} 
-                />
-                <button 
-                    className={`${BLACK_BUTTON} basis-1/4`} 
-                    onClick={()=> addThisComment(blog.id,text,user.email)}>
-                    Comment
-                </button>
-            </section>
+            {
+                !user &&
+                <h2 className='text-left text-xl'>Comments</h2>
+            }
+            {
+                user &&
+                <>
+                    <h2 className='text-left text-xl'>Add a comment</h2>
+                    <section className='flex'>
+                        <input 
+                            className={`${INPUT_BOX_WITH_SLATE_COLOR} basis-3/4`}
+                            onChange={(e) => setText(e.target.value)}
+                            value={text} 
+                        />
+                        <button 
+                            className={`${BLACK_BUTTON} basis-1/4`} 
+                            onClick={()=> addThisComment(blog.id,text,user.email)}>
+                            Comment
+                        </button>
+                    </section>
+                </>
+            }
+            {
+                comments.length === 0 && <p>No comments yet.</p>
+            }
             {
                 comments.toReversed().map((comment: Comment, index : number) => {
                     return (
@@ -51,8 +63,15 @@ const CommentSection = () => {
                             </article>
                             <article className='flex justify-between'>
                                 <p className='text-2xl'>{comment.text}</p>
-                                <button onClick={() => deleteThisComment(blog.id, comment.id)}
-                                    className='text-red-600'><FontAwesomeIcon icon={faTrash} /></button>
+                                {
+                                    comment.commentedBy.email === user?.email && 
+                                    <button 
+                                        className='text-red-600'
+                                        onClick={() => deleteThisComment(blog.id, comment.id)}>
+                                            <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                }
+                                
                             </article>
                         </div>
                     )

@@ -36,7 +36,8 @@ const Likes = () => {
         <div>
             <p>Likes : {blog.likedBy.length}</p>
             {
-                isCurrentUserLiked ?
+                user &&
+                (isCurrentUserLiked ?
                     <button
                         onClick={()=>unlikeThisPost(user.email,blog.id)}
                         className='text-red-600'>
@@ -47,6 +48,7 @@ const Likes = () => {
                         onClick={()=>likeThisPost(user.email,blog.id)}>
                         <FontAwesomeIcon icon={whiteHeart} />
                     </button>
+                )
             }
         </div>
     )
