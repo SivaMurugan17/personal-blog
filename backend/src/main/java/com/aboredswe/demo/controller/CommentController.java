@@ -23,13 +23,12 @@ public class CommentController {
 
     @PostMapping("/{blogId}")
     public ResponseEntity<List<Comment>> addComment(@RequestBody CommentPostPayload commentPostPayload,
-                                                    @PathVariable String blogId) throws AuthException {
+                                                    @PathVariable String blogId)
+                                                        throws AuthException {
         try {
             List<Comment> currentComments = commentService.addComment(commentPostPayload, blogId);
             log.info("Request: POST /comment/blogId, Comment added");
-            return ResponseEntity
-                    .ok()
-                    .body(currentComments);
+            return ResponseEntity.ok().body(currentComments);
         } catch (BlogNotFoundException e) {
             throw new AuthException("Blog not found");
         } catch (UserNotFoundException e) {
@@ -39,13 +38,13 @@ public class CommentController {
     }
 
     @DeleteMapping
-    public ResponseEntity<List<Comment>> deleteComment(@RequestParam String blogId, @RequestParam String commentId) throws AuthException {
+    public ResponseEntity<List<Comment>> deleteComment(@RequestParam String blogId,
+                                                       @RequestParam String commentId)
+                                                        throws AuthException {
         try {
             List<Comment> currentComments = commentService.deleteComment(blogId, commentId);
             log.info("Request: DELETE /comment?blogId, Deleted comment: {}",blogId);
-            return ResponseEntity
-                    .ok()
-                    .body(currentComments);
+            return ResponseEntity.ok().body(currentComments);
         } catch (BlogNotFoundException e) {
             throw new AuthException("Blog not found");
         }
