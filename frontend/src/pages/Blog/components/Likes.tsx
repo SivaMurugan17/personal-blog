@@ -34,7 +34,7 @@ const Likes = () => {
 
     return (
         <div>
-            <p>Likes : {blog.likedBy.length}</p>
+            <p className="text-xl">Likes : {blog.likedBy.length}</p>
             {
                 user &&
                 (isCurrentUserLiked ?

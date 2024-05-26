@@ -11,7 +11,7 @@ const TagSection = () => {
     })
 
   return (
-    <section className='w-10/12 mx-auto'>
+    <section className='w-10/12 mx-auto my-8'>
         <h1 className={`${HEADING_H1} my-4`}>Tags</h1>
         <div className='max-w-xs'>
         {
